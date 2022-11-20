@@ -7,7 +7,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 
-import static src.main.ch16networking.tcpip.TcpIpServer.getTime;
+import static ch16networking.tcpip.TcpIpServer.getTime;
 
 public class TcpIpServer3 {
     public static void main(String[] args) {

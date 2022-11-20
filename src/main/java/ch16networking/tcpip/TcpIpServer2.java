@@ -6,7 +6,7 @@ import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import static src.main.ch16networking.tcpip.TcpIpServer.*;
+import static ch16networking.tcpip.TcpIpServer.*;
 
 public class TcpIpServer2 {
     public static void main(String[] args) {

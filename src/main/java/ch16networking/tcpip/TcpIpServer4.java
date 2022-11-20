@@ -6,7 +6,7 @@ import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import static src.main.ch16networking.tcpip.TcpIpServer.getTime;
+import static ch16networking.tcpip.TcpIpServer.getTime;
 
 public class TcpIpServer4 implements Runnable {
     ServerSocket serverSocket;
