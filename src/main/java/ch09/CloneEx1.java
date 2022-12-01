@@ -7,8 +7,12 @@ class Point implements Cloneable{
         this.x = x;
         this.y = y;
     }
-    public String toString(){
-        return String.format("x = %d, y = %d", x, y);
+//    public String toString(){
+//        return String.format("x = %d, y = %d", x, y);
+//    }
+
+    public String toString() {
+        return String.format("(%d, %d)", x, y);
     }
 
     public Object clone(){
@@ -18,6 +22,9 @@ class Point implements Cloneable{
         }catch (CloneNotSupportedException e){ }
         return obj;
     }
+    public Point cloneToPoint() {
+        return (Point)this.clone();
+    }
 }
 
 public class CloneEx1 {
@@ -26,5 +33,6 @@ public class CloneEx1 {
         Point copy = (Point)original.clone();
         System.out.println(original);
         System.out.println(copy);
+        System.out.println(original.cloneToPoint());
     }
 }
