@@ -1,6 +1,9 @@
 package modernaction.chap02;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +11,8 @@ import java.util.function.Function;
 
 import static modernaction.chap02.Apple.Color.*;
 
-@Data
+@Getter
+@Setter
 public class Apple {
     enum Color {
         RED(0), GREEN(1);
@@ -28,6 +32,15 @@ public class Apple {
 
     final Color color;
     final Integer weight;
+
+    public Apple(Integer weight) {
+        this(GREEN, weight);
+    }
+
+    public Apple(Color color, Integer weight) {
+        this.color = color;
+        this.weight = weight;
+    }
 
     public static List<Apple> filterGreenApples(List<Apple> inventory) {
         List<Apple> result = new ArrayList<>();
@@ -57,6 +70,11 @@ public class Apple {
             }
         }
         return result;
+    }
+
+
+    public String toString() {
+        return String.format("a %s Apple : %dg", this.color.name().toLowerCase(), this.weight);
     }
 
     public static class AppleHeavyWeightPredicate implements ApplePredicate {
