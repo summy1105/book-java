@@ -1,21 +1,32 @@
 package modernaction.chap03_lambda;
 
 import modernaction.chap02.Apple;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.FilenameFilter;
-import java.nio.file.DirectoryStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
-import java.util.function.BiFunction;
+import java.util.function.DoubleToIntFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class MethodReferenceTest {
+
+    List<Apple> inventory;
+
+    final int COLOR_CNT = 2;
+    final int BASIC_WEIGHT = 100;
+
+    @BeforeEach
+    public void fillInventory() {
+        inventory = new ArrayList<>();
+        for (int i = 0; i < 100; i++) {
+            Apple.Color color = Apple.Color.getByNumber(i % COLOR_CNT);
+            inventory.add(new Apple(color, i+BASIC_WEIGHT));
+        }
+    }
 
     @Test
     public void expression1() {
@@ -93,5 +104,57 @@ class MethodReferenceTest {
     public void tripleClassMethodReference() {
         TripleParameterFunction<TripleFieldClass> function = (int i, int j, int k) -> new TripleFieldClass(i, j, k);
         function = TripleFieldClass::new;
+    }
+
+    @Test
+    public void compareMethodReference() {
+        inventory.sort(new Comparator<Apple>() {
+            @Override
+            public int compare(Apple a1, Apple a2) {
+                return a1.getWeight().compareTo(a2.getWeight());
+            }
+        });
+
+        inventory.sort((a1, a2)->a1.getWeight().compareTo(a2.getWeight()));
+
+        inventory.sort(Comparator.comparing(a->a.getWeight()));
+
+        inventory.sort(Comparator.comparing(Apple::getWeight));
+        inventory.forEach(System.out::println);
+    }
+
+    @Test
+    public void comparatorTest() {
+        inventory.sort(Comparator.comparing(Apple::getWeight).reversed());
+//        inventory.forEach(System.out::println);
+
+        inventory.sort(Comparator.comparing(Apple::getColor).reversed().thenComparing(Apple::getWeight));
+        inventory.forEach(System.out::println);
+    }
+
+    @Test
+    public void predicateCombinationTest() {
+        Predicate<Apple> redApple = (Apple a) -> a.getColor().equals(Apple.Color.GREEN);
+        Predicate<Apple> notRedApple = redApple.negate();
+        Predicate<Apple> redAndHeavyApple = redApple.and(a -> a.getWeight() > 150);
+        Predicate<Apple> redAndHeavyAppleOrGreen = redApple.and(a -> a.getWeight() > 150).or(a -> Apple.Color.GREEN.equals(a.getColor()));
+    }
+
+    @Test
+    public void functionCombinationTest() {
+        Function<Integer,Integer> f = x -> x + 1;
+        Function<Integer, Integer> g = x -> x * 2;
+        Function<Integer, Integer> h = f.andThen(g); // g(f(x))
+        Function<Integer, Integer> i = f.compose(g); // f(g(x))
+    }
+
+    @Test
+    public void transformationPipelineTest() {
+        Function<String, String> addHeader = Letter::addHeader;
+        Function<String, String> transformationPipeline =
+                addHeader.andThen(Letter::checkSpelling)
+                        .andThen(Letter::addFooter);
+        String lambda = transformationPipeline.apply("labda");
+        System.out.println(lambda);
     }
 }

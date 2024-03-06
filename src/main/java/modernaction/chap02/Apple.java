@@ -14,13 +14,13 @@ import static modernaction.chap02.Apple.Color.*;
 @Getter
 @Setter
 public class Apple {
-    enum Color {
+    public enum Color {
         RED(0), GREEN(1);
         final int value;
         Color(int value){
             this.value=value;
         }
-        static Color getByNumber(int value){
+        public static Color getByNumber(int value){
             switch (value){
                 case 0 : return RED;
                 case 1: return GREEN;
