@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -132,5 +133,18 @@ class DishStreamTest {
                 .flatMap(i1 -> integers2.stream().filter(i2->(i1+i2)%3==0).map(i2 -> "[" + i1 + ", " + i2 + "]"))
                 .collect(Collectors.toList());
         System.out.println("collect = " + collect);
+    }
+
+    @Test
+    public void streamMatch() {
+        System.out.println("anyMatch: " + menu.stream().anyMatch(Dish::isVegetarian));
+        System.out.println("allMatch: " + menu.stream().allMatch(d -> d.getCalories() < 1000));
+        System.out.println("nonMatch: " + menu.stream().noneMatch(d -> d.getCalories() > 1000));
+    }
+
+    @Test
+    public void streamFindAny() {
+        Optional<Dish> dish = menu.stream().filter(Dish::isVegetarian).findAny();
+        dish.ifPresent(d-> System.out.println("d = " + d));
     }
 }
