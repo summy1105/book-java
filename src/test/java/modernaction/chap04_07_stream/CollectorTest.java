@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static java.util.stream.Collectors.*;
 
@@ -160,4 +161,95 @@ public class CollectorTest {
         Map<Dish.Type, Optional<Dish>> mostCaloricByType = menu.stream().collect(groupingBy(Dish::getType, maxBy(Comparator.comparingInt(Dish::getCalories))));
         System.out.println("mostCaloricByType = " + mostCaloricByType);
     }
+
+    @Test
+    public void groupingTest6() {
+        Map<Dish.Type, Dish> mostCaloricByType = menu.stream().collect(groupingBy(Dish::getType,
+                collectingAndThen(
+                        maxBy(Comparator.comparingInt(Dish::getCalories)) //collector
+                        , Optional::get // 변환함수
+                )
+        ));
+        System.out.println("mostCaloricByType = " + mostCaloricByType);
+    }
+
+    @Test
+    public void groupingTest7() {
+        Map<Dish.Type, Set<CaloricLevel>> caloricLevelByType = menu.stream().collect(
+                groupingBy(Dish::getType
+                        , mapping(
+                                d -> {
+                                    if (d.getCalories() <= 400) return CaloricLevel.DIET;
+                                    else if (d.getCalories() <= 700) return CaloricLevel.NORMAL;
+                                    else return CaloricLevel.FAT;
+                                }
+                                , toSet() // 중복X
+                        )
+                )
+        );
+        System.out.println("caloricLevelByType = " + caloricLevelByType);
+
+        caloricLevelByType = menu.stream().collect(
+                groupingBy(Dish::getType
+                        , mapping(d -> {
+                                    if (d.getCalories() <= 400) return CaloricLevel.DIET;
+                                    else if (d.getCalories() <= 700) return CaloricLevel.NORMAL;
+                                    else return CaloricLevel.FAT;
+                                },
+                                toCollection(HashSet::new)
+                        )
+                )
+        );
+        System.out.println("caloricLevelByType = " + caloricLevelByType);
+    }
+
+    @Test
+    public void partitioningTest1() {
+        Map<Boolean, List<Dish>> partitionedMenu = menu.stream().collect(partitioningBy(Dish::isVegetarian));
+        System.out.println("partitionedMenu = " + partitionedMenu);
+
+        Map<Boolean, Map<Dish.Type, List<Dish>>> vegetarianDishesByType
+                = menu.stream().collect(partitioningBy(Dish::isVegetarian, groupingBy(Dish::getType)));
+        System.out.println("vegetarianDishesByType = " + vegetarianDishesByType);
+    }
+
+    @Test
+    public void partitioningTest2() {
+        Map<Boolean, Dish> mostCaloricPartitionedByVegetarian = menu.stream().collect(
+            partitioningBy(Dish::isVegetarian
+                , collectingAndThen(
+                        maxBy(Comparator.comparingInt(Dish::getCalories))
+                        , Optional::get
+                )
+        ));
+        System.out.println("mostCaloricPartitionedByVegetarian = " + mostCaloricPartitionedByVegetarian);
+    }
+
+    public boolean isPrime(int candidate) {
+        int candidateRoot = (int)Math.sqrt((double) candidate);
+        return IntStream.rangeClosed(2, candidateRoot).noneMatch(i-> candidate%i ==0);
+    }
+
+    @Test
+    public void primePartitioningTest() {
+        Map<Boolean, List<Integer>> partitionPrimes = IntStream.rangeClosed(2, 2000).boxed().collect(partitioningBy(i -> isPrime(i) || i == 2));
+        System.out.println("partitionPrimes = " + partitionPrimes);
+    }
+
+    @Test
+    public void customCollectorTest() {
+        List<Dish> vegetarianDishes = menu.stream().filter(Dish::isVegetarian).collect(new ToListCollector<Dish>());
+        System.out.println("vegetarianDishes = " + vegetarianDishes);
+    }
+
+    @Test
+    public void collectorTest() {
+        ArrayList<Object> collect = menu.stream().collect(
+                ArrayList::new
+                , List::add
+                , List::addAll
+        );
+        System.out.println("collect = " + collect);
+    }
+
 }

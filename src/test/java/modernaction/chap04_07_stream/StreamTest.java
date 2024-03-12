@@ -8,7 +8,9 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.List;
 import java.util.function.IntSupplier;
+import java.util.function.Predicate;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -109,5 +111,17 @@ public class StreamTest {
                 return oldPrevious;
             }
         }).limit(10).forEach(System.out::println);
+    }
+
+
+    public static <A> List<A> takeWhile(List<A> list, Predicate<A> p){
+        int i=0;
+        for (A value : list) {
+            if(!p.test(value)){
+                return list.subList(0, i);
+            }
+            i++;
+        }
+        return list;
     }
 }
