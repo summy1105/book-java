@@ -43,6 +43,7 @@ class ArgsTest {
         Args args = new Args("x", new String[]{"-x"});
         assertEquals(1, args.cardinality());
         assertTrue(args.getBoolean('x'));
+        assertFalse(args.getBoolean('y'));
     }
 
     @Test
@@ -50,7 +51,9 @@ class ArgsTest {
         Args args = new Args("x*", new String[]{"-x", "param"});
         assertEquals(1, args.cardinality());
         assertTrue(args.has('x'));
+        assertFalse(args.has('y'));
         assertEquals("param", args.getString('x'));
+        assertEquals("", args.getString('y'));
     }
 
     @Test
