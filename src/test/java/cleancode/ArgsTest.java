@@ -68,6 +68,8 @@ class ArgsTest {
         assertEquals(2, args.cardinality());
         assertTrue(args.has('x'));
         assertTrue(args.has('y'));
+        assertTrue(args.getBoolean('x'));
+        assertTrue(args.getBoolean('y'));
     }
 
     @Test
