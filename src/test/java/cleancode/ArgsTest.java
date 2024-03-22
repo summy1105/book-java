@@ -20,6 +20,7 @@ class ArgsTest {
     public void testWithNoSchemaButWithOneArguments() throws ParseException {
         Args args = new Args("", new String[]{"-x"});
         assertEquals(ErrorCode.UNEXPECTED_ARGUMENT, args.getErrorCode());
+
     }
 
     @Test
@@ -84,6 +85,7 @@ class ArgsTest {
     public void testInvalidInteger() throws ParseException {
         Args args = new Args("x#", new String[]{"-x", "Forty two"});
         assertEquals(ErrorCode.INVALID_INTEGER, args.getErrorCode());
+        assertEquals("Forty two", args.getErrorParameter());
     }
 
     @Test

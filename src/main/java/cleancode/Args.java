@@ -6,11 +6,12 @@ import java.util.*;
 public class Args {
     private String schema;
     private String[] args;
+    private List<String> argList;
+    private Iterator<String> currentArgument;
     private boolean valid = true;
     private Set<Character> unexpectedArguments = new TreeSet<>();
     private Map<Character, ArgumentMarshaler> marshalers = new HashMap<>();
     private Set<Character> argsFound = new HashSet<>();
-    private int currentArgument;
     private char errorArgumentId = '\0';
     private String errorParameter = "TILT";
     private ErrorCode errorCode = ErrorCode.OK;
@@ -18,14 +19,16 @@ public class Args {
         OK, MISSING_STRING, MISSING_INTEGER, INVALID_INTEGER, UNEXPECTED_ARGUMENT
     }
 
+
     public Args(String schema, String[] args) throws ParseException{
         this.schema = schema;
         this.args = args;
+        argList = Arrays.asList(args);
         valid = parse();
     }
 
     private boolean parse() throws ParseException {
-        if (schema.length() == 0 && args.length == 0) {
+        if (schema.length() == 0 && argList.size() == 0) {
             return true;
         }
         parseSchema();
@@ -94,8 +97,8 @@ public class Args {
     }
 
     private boolean parseArguments() throws ArgsException {
-        for (currentArgument = 0; currentArgument < args.length; currentArgument++) {
-            String arg = args[currentArgument];
+        for (currentArgument = argList.iterator(); currentArgument.hasNext(); ) {
+            String arg = currentArgument.next();
             parseArgument(arg);
         }
         return true;
@@ -125,56 +128,15 @@ public class Args {
 
     private boolean setArgument(char argChar) throws ArgsException {
         ArgumentMarshaler m = marshalers.get(argChar);
-        if(m==null) {
-            this.valid = false;
-            errorArgumentId = argChar;
-            errorCode = ErrorCode.UNEXPECTED_ARGUMENT;
-            throw new ArgsException();
-        }
+        if(m==null) return false;
         try{
-            if (m instanceof BooleanArgumentMarshaler)
-                setBooleanArg(m);
-            else if (m instanceof StringArgumentMarshaler)
-                setStringArg(m);
-            else if (m instanceof IntegerArgumentMarshaler)
-                setIntArg(m);
-            else return false;
+            m.set(currentArgument);
         }catch (ArgsException e){
             valid = false;
             errorArgumentId = argChar;
             throw e;
         }
         return true;
-    }
-
-    private void setBooleanArg(ArgumentMarshaler m) throws ArgsException {
-        m.set("true");
-    }
-
-    private void setStringArg(ArgumentMarshaler m) throws ArgsException {
-        currentArgument++;
-        try {
-            m.set(args[currentArgument]);
-        } catch (ArrayIndexOutOfBoundsException e) {
-            errorCode = ErrorCode.MISSING_STRING;
-            new ArgsException();
-        }
-    }
-
-    private void setIntArg(ArgumentMarshaler m) throws ArgsException{
-        currentArgument++;
-        String parameter = null;
-        try {
-            parameter = args[currentArgument];
-            m.set(parameter);
-        } catch (ArrayIndexOutOfBoundsException e) {
-            errorCode = ErrorCode.MISSING_INTEGER;
-            throw new ArgsException();
-        } catch (ArgsException e) {
-            errorParameter = parameter;
-            errorCode = ErrorCode.INVALID_INTEGER;
-            throw e;
-        }
     }
 
     public int cardinality() {
@@ -251,20 +213,24 @@ public class Args {
         return errorCode;
     }
 
+    public String getErrorParameter() {
+        return errorParameter;
+    }
+
     public static class ArgsException extends Exception{
     }
 
 
-    private abstract class ArgumentMarshaler{
+    private interface ArgumentMarshaler{
 
-        public abstract void set(String stringValue) throws ArgsException;
-        public abstract Object get();
+        void set(Iterator<String> currentArgument) throws ArgsException;
+        Object get();
     }
 
-    private class BooleanArgumentMarshaler extends ArgumentMarshaler {
+    private class BooleanArgumentMarshaler implements ArgumentMarshaler {
         protected boolean booleanValue = false;
         @Override
-        public void set(String stringValue) {
+        public void set(Iterator<String> currentArgument) {
             booleanValue = true;
         }
 
@@ -274,11 +240,16 @@ public class Args {
         }
     }
 
-    private class StringArgumentMarshaler extends ArgumentMarshaler {
+    private class StringArgumentMarshaler implements ArgumentMarshaler {
         protected String stringValue;
         @Override
-        public void set(String stringValue) {
-            this.stringValue = stringValue;
+        public void set(Iterator<String> currentArgument) throws ArgsException {
+            try {
+                this.stringValue = currentArgument.next();
+            } catch (NoSuchElementException e) {
+                errorCode = ErrorCode.MISSING_STRING;
+                throw new ArgsException();
+            }
         }
 
         @Override
@@ -287,13 +258,21 @@ public class Args {
         }
     }
 
-    private class IntegerArgumentMarshaler extends ArgumentMarshaler {
+    private class IntegerArgumentMarshaler implements ArgumentMarshaler {
         protected int integerValue;
         @Override
-        public void set(String stringValue) throws ArgsException{
+        public void set(Iterator<String> currentArgument) throws ArgsException{
+            String parameter = null;
             try{
-                this.integerValue = Integer.parseInt(stringValue);
-            }catch (NumberFormatException e){
+                parameter = currentArgument.next();
+                this.integerValue = Integer.parseInt(parameter);
+            } catch (NumberFormatException e){
+                errorParameter = parameter;
+                errorCode = ErrorCode.INVALID_INTEGER;
+                throw new ArgsException();
+            } catch (NoSuchElementException e) {
+                errorParameter = parameter;
+                errorCode = ErrorCode.MISSING_INTEGER;
                 throw new ArgsException();
             }
         }
