@@ -1,46 +1,65 @@
 package cleancode;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.text.ParseException;
-
-import static cleancode.Args.*;
+import static cleancode.ArgsException.ErrorCode;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ArgsTest {
 
     @Test
-    public void testCreateWithNoSchemaOrArguments() throws ParseException {
+    public void testCreateWithNoSchemaOrArguments() throws ArgsException {
         Args args = new Args("", new String[0]);
         assertEquals(0, args.cardinality());
     }
 
     @Test
-    public void testWithNoSchemaButWithOneArguments() throws ParseException {
-        Args args = new Args("", new String[]{"-x"});
-        assertEquals(ErrorCode.UNEXPECTED_ARGUMENT, args.getErrorCode());
+    public void testWithNoSchemaButWithOneArguments() throws ArgsException {
+        try {
+            new Args("", new String[]{"-x"});
+            fail();
+        } catch (ArgsException e) {
+            assertEquals(ErrorCode.UNEXPECTED_ARGUMENT, e.getErrorCode());
+            assertEquals('x', e.getErrorArgumentId());
+        }
 
     }
 
     @Test
-    public void testWithNoSchemaButWithMultipleArguments() throws ParseException {
-        Args args = new Args("", new String[]{"-x", "-y"});
-        assertEquals(ErrorCode.UNEXPECTED_ARGUMENT, args.getErrorCode());
+    public void testWithNoSchemaButWithMultipleArguments() throws ArgsException {
+        try {
+            new Args("", new String[]{"-x", "-y"});
+            fail();
+        } catch (ArgsException e) {
+            assertEquals(ErrorCode.UNEXPECTED_ARGUMENT, e.getErrorCode());
+            assertEquals('x', e.getErrorArgumentId());
+        }
     }
 
     @Test
-    public void testNonLetterSchema() throws ParseException {
-        assertThrows(ParseException.class, ()-> new Args("*", new String[]{}));
+    public void testNonLetterSchema() throws ArgsException {
+        try {
+            new Args("*", new String[]{});
+            fail("Args constructor should have thrown exception");
+        } catch (ArgsException e) {
+            assertEquals(ErrorCode.INVALID_ARGUMENT_NAME, e.getErrorCode());
+            assertEquals('*', e.getErrorArgumentId());
+        }
     }
 
     @Test
     public void testInvalidArgumentFormat() {
-        assertThrows(ParseException.class, () -> new Args("f~", new String[]{}));
+        try {
+            new Args("f~", new String[]{});
+            fail("Args constructor should have throws exception");
+        } catch (ArgsException e) {
+            assertEquals(ErrorCode.INVALID_FORMAT, e.getErrorCode());
+            assertEquals('f', e.getErrorArgumentId());
+        }
     }
 
     @Test
-    public void testSimpleBooleanPresent() throws ParseException {
+    public void testSimpleBooleanPresent() throws ArgsException {
         Args args = new Args("x", new String[]{"-x"});
         assertEquals(1, args.cardinality());
         assertTrue(args.getBoolean('x'));
@@ -48,7 +67,7 @@ class ArgsTest {
     }
 
     @Test
-    public void testSimpleStringPresent() throws ParseException {
+    public void testSimpleStringPresent() throws ArgsException {
         Args args = new Args("x*", new String[]{"-x", "param"});
         assertEquals(1, args.cardinality());
         assertTrue(args.has('x'));
@@ -58,13 +77,18 @@ class ArgsTest {
     }
 
     @Test
-    public void testMissingStringArgument() throws ParseException {
-        Args args = new Args("x*", new String[]{"-x"});
-        assertEquals(ErrorCode.MISSING_STRING, args.getErrorCode());
+    public void testMissingStringArgument() throws ArgsException {
+        try {
+            new Args("x*", new String[]{"-x"});
+            fail();
+        } catch (ArgsException e) {
+            assertEquals(ErrorCode.MISSING_STRING, e.getErrorCode());
+            assertEquals('x', e.getErrorArgumentId());
+        }
     }
 
     @Test
-    public void testSpacesInFormat() throws ParseException {
+    public void testSpacesInFormat() throws ArgsException {
         Args args = new Args("x, y", new String[]{"-xy"});
         assertEquals(2, args.cardinality());
         assertTrue(args.has('x'));
@@ -74,7 +98,7 @@ class ArgsTest {
     }
 
     @Test
-    public void testSimpleIntPresent() throws ParseException {
+    public void testSimpleIntPresent() throws ArgsException {
         Args args = new Args("x#", new String[]{"-x", "42"});
         assertEquals(1, args.cardinality());
         assertTrue(args.has('x'));
@@ -82,24 +106,56 @@ class ArgsTest {
     }
 
     @Test
-    public void testInvalidInteger() throws ParseException {
-        Args args = new Args("x#", new String[]{"-x", "Forty two"});
-        assertEquals(ErrorCode.INVALID_INTEGER, args.getErrorCode());
-        assertEquals("Forty two", args.getErrorParameter());
+    public void testInvalidInteger() throws ArgsException {
+        try {
+            new Args("x#", new String[]{"-x", "Forty two"});
+            fail();
+        } catch (ArgsException e) {
+            assertEquals(ErrorCode.INVALID_INTEGER, e.getErrorCode());
+            assertEquals('x', e.getErrorArgumentId());
+            assertEquals ("Forty two", e.getErrorParameter());
+        }
     }
 
     @Test
-    public void testSimpleDoublePresent() {
-//        Args args = new Args("x##", new String[]{"-x", "42.3"});
+    public void testMissingInteger() throws Exception {
+        try {
+            new Args("x#", new String[]{"-x"});
+            fail();
+        } catch (ArgsException e) {
+            assertEquals(ErrorCode.MISSING_INTEGER, e.getErrorCode());
+            assertEquals('x', e.getErrorArgumentId());
+        }
+    }
+
+    @Test
+    public void testSimpleDoublePresent() throws ArgsException {
+        Args args = new Args("x##", new String[]{"-x", "42.3"});
+        assertEquals(1, args.cardinality());
+        assertTrue(args.has('x'));
+        assertEquals(42.3, args.getDouble('x'));
     }
 
     @Test
     public void testInvalidDouble() {
-//        Args args = new Args("x##", new String[]{"-x", "Forty two"});
+        try {
+            new Args("x##" , new String[]{"-x", "Forty two"});
+            fail();
+        } catch (ArgsException e) {
+            assertEquals(ErrorCode.INVALID_DOUBLE, e.getErrorCode());
+            assertEquals('x', e.getErrorArgumentId());
+            assertEquals("Forty two", e.getErrorParameter());
+        }
     }
     
     @Test
-    public void testMissingDouble() {
-//        Args args = new Args("x##", new String[]{"-x"});
+    public void testMissingDouble() throws Exception {
+        try {
+            new Args("x##", new String[]{"-x"});
+            fail();
+        } catch (ArgsException e) {
+            assertEquals(ErrorCode.MISSING_DOUBLE, e.getErrorCode());
+            assertEquals('x', e.getErrorArgumentId());
+        }
     }
 }
