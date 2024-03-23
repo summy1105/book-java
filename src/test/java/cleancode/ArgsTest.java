@@ -2,6 +2,8 @@ package cleancode;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+
 import static cleancode.ArgsException.ErrorCode;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -42,7 +44,7 @@ class ArgsTest {
             new Args("*", new String[]{});
             fail("Args constructor should have thrown exception");
         } catch (ArgsException e) {
-            assertEquals(ErrorCode.INVALID_ARGUMENT_NAME, e.getErrorCode());
+            assertEquals(ErrorCode.INVALID_ARGUMENT_FORMAT, e.getErrorCode());
             assertEquals('*', e.getErrorArgumentId());
         }
     }
@@ -53,7 +55,7 @@ class ArgsTest {
             new Args("f~", new String[]{});
             fail("Args constructor should have throws exception");
         } catch (ArgsException e) {
-            assertEquals(ErrorCode.INVALID_FORMAT, e.getErrorCode());
+            assertEquals(ErrorCode.INVALID_ARGUMENT_FORMAT, e.getErrorCode());
             assertEquals('f', e.getErrorArgumentId());
         }
     }
@@ -157,5 +159,50 @@ class ArgsTest {
             assertEquals(ErrorCode.MISSING_DOUBLE, e.getErrorCode());
             assertEquals('x', e.getErrorArgumentId());
         }
+    }
+
+    @Test
+    public void testSimpleStringArrayPresent() throws ArgsException {
+        Args args = new Args("x[*]", new String[]{"-x", "param,parameter,test"});
+        assertEquals(1, args.cardinality());
+        assertTrue(args.has('x'));
+        String[] stringArray = args.getStringArray('x');
+        assertTrue(Arrays.stream(stringArray).anyMatch(x->x.equals("param")));
+        assertTrue(Arrays.stream(stringArray).anyMatch(x->x.equals("parameter")));
+        assertTrue(Arrays.stream(stringArray).anyMatch(x->x.equals("test")));
+    }
+
+    @Test
+    public void testInvalidStringArray() {
+        try {
+            new Args("x##" , new String[]{"-x", "Forty two"});
+            fail();
+        } catch (ArgsException e) {
+            assertEquals(ErrorCode.INVALID_DOUBLE, e.getErrorCode());
+            assertEquals('x', e.getErrorArgumentId());
+            assertEquals("Forty two", e.getErrorParameter());
+        }
+    }
+
+    @Test
+    public void testMissingStringArray() throws Exception {
+        try {
+            new Args("x##", new String[]{"-x"});
+            fail();
+        } catch (ArgsException e) {
+            assertEquals(ErrorCode.MISSING_DOUBLE, e.getErrorCode());
+            assertEquals('x', e.getErrorArgumentId());
+        }
+    }
+
+
+    @Test
+    public void testTwicePresent() throws ArgsException {
+        Args args = new Args("x*, y##", new String[]{"-xy", "param", "42.3"});
+        assertEquals(2, args.cardinality());
+        assertTrue(args.has('x'));
+        assertTrue(args.has('y'));
+        assertEquals("param", args.getString('x'));
+        assertEquals(42.3, args.getDouble('y'));
     }
 }

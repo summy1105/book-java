@@ -7,14 +7,15 @@ import lombok.Setter;
 @Setter
 public class ArgsException extends Exception {
     private char errorArgumentId = '\0';
-    private String errorParameter = "TILT";
+    private String errorParameter = null;
     private ErrorCode errorCode = ErrorCode.OK;
     public enum ErrorCode{
         OK, MISSING_STRING
         , MISSING_INTEGER, INVALID_INTEGER
         , MISSING_DOUBLE, INVALID_DOUBLE
+        , MISSING_STRING_ARRAY, INVALID_STRING_ARRAY
         , UNEXPECTED_ARGUMENT
-        , INVALID_ARGUMENT_NAME, INVALID_FORMAT
+        , INVALID_ARGUMENT_FORMAT
     }
 
     public ArgsException(String errorParameter, ErrorCode errorCode) {
@@ -30,10 +31,6 @@ public class ArgsException extends Exception {
 
     public ArgsException(ErrorCode errorCode) {
         this.errorCode = errorCode;
-    }
-
-    public ArgsException(String message) {
-        super(message);
     }
 
 
