@@ -15,19 +15,4 @@ public class Trade {
     private Stock stock;
     private int quantity;
     private double price;
-
-    public static class TradeBuilder {
-        private final MethodChainingOrderBuilder builder;
-        public final Trade trade = new Trade();
-
-        public TradeBuilder(MethodChainingOrderBuilder builder, Type type, int quantity) {
-            this.builder = builder;
-            trade.setType(type);
-            trade.setQuantity(quantity);
-        }
-
-        public StockBuilder stock(String symbol) {
-            return new StockBuilder(builder, trade, symbol);
-        }
-    }
 }

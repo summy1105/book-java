@@ -1,4 +1,8 @@
-package modernaction.chap10;
+package modernaction.chap10.builder;
+
+import modernaction.chap10.Order;
+import modernaction.chap10.Stock;
+import modernaction.chap10.Trade;
 
 import java.util.stream.Stream;
 

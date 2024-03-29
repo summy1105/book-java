@@ -1,6 +1,7 @@
-package modernaction.chap10;
+package modernaction.chap10.builder.methodchain;
 
-import static modernaction.chap10.Order.*;
+import modernaction.chap10.Trade;
+import modernaction.chap10.builder.methodchain.MethodChainingOrderBuilder;
 
 public class TradeBuilderWithStock {
     private final MethodChainingOrderBuilder builder;
