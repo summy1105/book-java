@@ -1,8 +1,9 @@
-package cleancode;
+package cleancode.chap14;
 
+import cleancode.chap14.ArgsException;
 import org.junit.jupiter.api.Test;
 
-import static cleancode.ArgsException.*;
+import static cleancode.chap14.ArgsException.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ArgsExceptionTest {

@@ -1,10 +1,10 @@
-package cleancode;
+package cleancode.chap14;
 
-import cleancode.marshaler.*;
+import cleancode.chap14.marshaler.*;
 
 import java.util.*;
 
-import static cleancode.ArgsException.ErrorCode;
+import static cleancode.chap14.ArgsException.ErrorCode;
 
 public class Args {
     private String schema;

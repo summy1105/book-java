@@ -1,4 +1,4 @@
-package cleancode;
+package cleancode.chap14;
 
 import lombok.Getter;
 import lombok.Setter;
