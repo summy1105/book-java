@@ -2,10 +2,7 @@ package modernaction.chap11;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import static modernaction.chap11.Person.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -65,5 +62,25 @@ class PersonOptionalTest {
 
         String carInsuranceName2 = getCarInsuranceName(Optional.of(person), 30);
         assertEquals(carInsuranceName2, "Unknown");
+    }
+
+    @Test
+    public void quiz11_3() {
+        Properties param = new Properties();
+        param.setProperty("a", "5");
+        param.setProperty("b", "true");
+        param.setProperty("c", "-3");
+
+        assertEquals(5, readDuration(param, "a"));
+        assertEquals(0, readDuration(param, "b"));
+        assertEquals(0, readDuration(param, "c"));
+        assertEquals(0, readDuration(param, "d"));
+    }
+
+    public int readDuration(Properties props, String key) {
+            return Optional.ofNullable(props.getProperty(key))
+                    .flatMap(OptionalUtility::stringToInt)
+                    .filter(i->i>0)
+                    .orElse(0);
     }
 }
