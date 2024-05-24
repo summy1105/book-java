@@ -2,6 +2,8 @@ package modernaction.chap16;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 public class Shops {
@@ -26,4 +28,23 @@ public class Shops {
                 .map(CompletableFuture::join)
                 .collect(Collectors.toList());
     }
+
+
+    private final Executor executor = Executors.newFixedThreadPool(10, (runnable) -> {
+        Thread t = new Thread(runnable);
+        t.setDaemon(true);
+        return t;
+    });
+
+    public static List<String> findPrice_executor(List<Shop> shops, String product) {
+        Executor executorDeliverer = new Shops().executor;
+        List<CompletableFuture<String>> priceFutures = shops.stream()
+                .map(shop -> CompletableFuture.supplyAsync(() -> shop.getShopName()+" price is "+shop.getPrice(product), executorDeliverer))
+                .collect(Collectors.toList());
+
+        return priceFutures.stream()
+                .map(CompletableFuture::join)
+                .collect(Collectors.toList());
+    }
+
 }
