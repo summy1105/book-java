@@ -14,9 +14,9 @@ public class TempInfo {
     private final int temp;
 
     public static TempInfo fetch(String town) {
-        if(random.nextInt(10) == 0)
+        if(random.nextInt(50) == 0)
             throw new RuntimeException("Error!");
-        return new TempInfo(town, random.nextInt(100));
+        return new TempInfo(town, random.nextInt(100)-30);
     }
 
     @Override
