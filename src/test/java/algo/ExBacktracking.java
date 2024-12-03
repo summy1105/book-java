@@ -2,6 +2,14 @@ package algo;
 
 import org.junit.jupiter.api.Test;
 
+/**
+ Back Tracking 개념
+ - 모든 경우의 수를 확인해야 할 때,
+    > for로는 확인 불가한 경우(깊이가 달라질 때)
+    > 예 : 순열 - M개의 수에서 N개를 뽑아서, 뽑는 순서(!)의 경우의 갯수
+ - depth에 재귀함수 사용
+ */
+
 // 1 아이디어 : 어떤 알고리즘?
 // 2 시간 복잡도
 // 3 자료구조

@@ -1,10 +1,27 @@
 package algo;
 
+import lombok.AllArgsConstructor;
 import org.junit.jupiter.api.Test;
 
+import java.util.Stack;
 import java.util.TreeSet;
 
-// 백준 2667
+/**
+ - 아이디어
+     > 시작점에 연결된 Vertex 찾기
+     > 스택사용
+
+ - 시간 복잡도
+     > 알고리즘이 얼마나 오래걸리는지
+     > DFS : o(v+e)
+
+ - 자료구조
+     > 검색할 그래프 : int[][]
+     > 방문여부 : boolean[][]
+     > stack
+ */
+
+// 백준 https://www.acmicpc.net/problem/2667
 public class ExDfs {
     int n;
     int[][] map;
@@ -27,37 +44,48 @@ public class ExDfs {
 
     private void call() {
         check = new boolean[n][n];
-        TreeSet<Integer> houseCount = new TreeSet<>();
+        TreeSet<Integer> houseCountList = new TreeSet<>();
 
-        for (int y = 0; y < n; y++) {
-            for (int x = 0; x < n; x++) {
-                if (map[y][x] == 1 && check[y][x] == false) {
+        for (int row = 0; row < n; row++) {
+            for (int column = 0; column < n; column++) {
+                if (map[row][column] == 1 && check[row][column] == false) {
                     // 방문체크 표시
-                    check[y][x] = true;
+                    check[row][column] = true;
                     // dfs로 크기 구하기
                     // 결과 리스트에 추가
-                    houseCount.add(dfs(y, x, 1));
+                    houseCountList.add(dfs(row, column, 1));
                 }
             }
         }
-        System.out.println(houseCount.size());
-        houseCount.stream().forEach(System.out::println);
+        System.out.println(houseCountList.size());
+        houseCountList.stream().forEach(System.out::println);
     }
-    // 3,6,9,12시 방향 순
-    static final int[] xDirection = {1, 0, -1, 0};
-    static final int[] yDirection = {0, -1, 0, 1};
 
-    private int dfs(int y1, int x1, int each) {
-        for (int k = 0; k < 4; k++) {
-            int y2 = y1 + yDirection[k];
-            int x2 = x1 + xDirection[k];
-            if (0 <= y2 && y2 < n
-                    && 0 <= x2 && x2 < n
-                    && map[y2][x2] == 1 && check[y2][x2] == false) {
-                check[y2][x2] = true;
-                each = dfs(y2, x2, each+1);
+    @AllArgsConstructor
+    static class Tuple{int row; int column;}
+
+    // 3,6,9,12시 방향 순
+    static final int[] rowDirection = {1, 0, -1, 0};
+    static final int[] columnDirection = {0, -1, 0, 1};
+
+    private int dfs(int row, int column, int count) {
+        Stack<Tuple> stack = new Stack<>();
+        stack.push(new Tuple(row, column));
+        while (true) {
+            if(stack.empty()) return count;
+
+            Tuple current = stack.pop();
+            for (int k = 0; k < 4; k++) {
+                int nextRow = current.row + rowDirection[k];
+                int nextColumn = current.column + columnDirection[k];
+                if (0 <= nextRow && nextRow < n
+                        && 0 <= nextColumn && nextColumn < n
+                        && map[nextRow][nextColumn] == 1 && check[nextRow][nextColumn] == false) {
+                    check[nextRow][nextColumn] = true;
+                    count++;
+                    stack.push(new Tuple(nextRow, nextColumn));
+                }
             }
         }
-        return each;
     }
 }
