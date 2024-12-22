@@ -1,10 +1,12 @@
 package algo;
 
-import lombok.AllArgsConstructor;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
-import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 /**
  - 아이디어
@@ -21,14 +23,22 @@ import java.util.TreeSet;
      > stack
  */
 
-// 백준 https://www.acmicpc.net/problem/2667
+
+/**
+    백준 https://www.acmicpc.net/problem/2667
+
+    정사각형 지도
+     첫 번째 줄에는 지도의 크기 N  5≤N≤25
+     집이 있음 : 1
+     집이 없음 : 0
+ */
 public class ExDfs {
     int n;
     int[][] map;
-    boolean[][] check;
+    boolean[][] visitCheck;
 
     @Test
-    public void test() {
+    public void 백준_예제() {
         n=7;
         map = new int[][]{
                 {0,1,1,0,1,0,0}
@@ -39,53 +49,138 @@ public class ExDfs {
                 ,{0,1,1,1,1,1,0}
                 ,{0,1,1,1,0,0,0}
         };
-        call();
+        visitCheck = new boolean[n][n];
+        List<Integer> houseCountList = execute();
+
+        Assertions.assertThat(houseCountList.size()).isEqualTo(3);
+        Assertions.assertThat(houseCountList).containsExactly(7, 8, 9);
+
+        System.out.println(houseCountList.size());
+        houseCountList.stream().sorted(Integer::compareTo).forEach(System.out::println);
     }
 
-    private void call() {
-        check = new boolean[n][n];
-        TreeSet<Integer> houseCountList = new TreeSet<>();
+    @Test
+    public void 전체가_빈_공간() {
+        n = 5;
+        map = new int[][]{
+                {0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0}
+        };
+        visitCheck = new boolean[n][n];
+        List<Integer> houseCountList = execute();
+
+        Assertions.assertThat(houseCountList.size()).isEqualTo(0);
+    }
+
+    @Test
+    public void 가장자리에만_단지() {
+        n = 5;
+        map = new int[][]{
+                {1, 0, 0, 0, 1},
+                {0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0},
+                {1, 0, 0, 0, 1}
+        };
+        visitCheck = new boolean[n][n];
+        List<Integer> houseCountList = execute();
+
+        Assertions.assertThat(houseCountList.size()).isEqualTo(4);
+        Assertions.assertThat(houseCountList).containsExactly(1, 1, 1, 1);
+    }
+
+    @Test
+    public void 하나의_큰_단지() {
+        n = 4;
+        map = new int[][]{
+                {1, 1, 1, 1},
+                {1, 1, 1, 1},
+                {1, 1, 1, 1},
+                {1, 1, 1, 1}
+        };
+        visitCheck = new boolean[n][n];
+        List<Integer> houseCountList = execute();
+
+        Assertions.assertThat(houseCountList.size()).isEqualTo(1);
+        Assertions.assertThat(houseCountList).containsExactly(16);
+    }
+
+    @Test
+    public void 단지가_흩어져_있고_크기가_다양() {
+        n = 6;
+        map = new int[][]{
+                {1, 1, 0, 0, 0, 1},
+                {0, 0, 0, 1, 1, 0},
+                {0, 0, 0, 1, 1, 0},
+                {1, 1, 1, 0, 0, 0},
+                {1, 0, 0, 0, 0, 1},
+                {1, 1, 1, 1, 1, 1}
+        };
+        visitCheck = new boolean[n][n];
+        List<Integer> houseCountList = execute();
+
+        Assertions.assertThat(houseCountList.size()).isEqualTo(4);
+        Assertions.assertThat(houseCountList).containsExactly(1, 2, 4, 11);
+    }
+
+    @Test
+    public void 단지의_크기가_모두_1인_경우() {
+        n = 5;
+        map = new int[][]{
+                {1, 0, 1, 0, 1},
+                {0, 1, 0, 1, 0},
+                {1, 0, 1, 0, 1},
+                {0, 1, 0, 1, 0},
+                {1, 0, 1, 0, 1}
+        };
+        visitCheck = new boolean[n][n];
+        List<Integer> houseCountList = execute();
+
+        Assertions.assertThat(houseCountList.size()).isEqualTo(13);
+        Assertions.assertThat(houseCountList).containsExactly(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+    }
+
+    private List<Integer> execute() {
+        List<Integer> houseCountList = new ArrayList<>();
 
         for (int row = 0; row < n; row++) {
             for (int column = 0; column < n; column++) {
-                if (map[row][column] == 1 && check[row][column] == false) {
-                    // 방문체크 표시
-                    check[row][column] = true;
-                    // dfs로 크기 구하기
-                    // 결과 리스트에 추가
+                if (visitCheck[row][column] == false
+                        && map[row][column] == 1) {
                     houseCountList.add(dfs(row, column, 1));
                 }
             }
         }
-        System.out.println(houseCountList.size());
-        houseCountList.stream().forEach(System.out::println);
+
+        return houseCountList.stream().sorted(Integer::compareTo).collect(Collectors.toList());
     }
 
-    @AllArgsConstructor
-    static class Tuple{int row; int column;}
+    // 3, 6, 9, 12 시 방향
+    static final int[] rowDirection = {0, 1, 0, -1};
+    static final int[] columnDirection = {1, 0, -1, 0};
 
-    // 3,6,9,12시 방향 순
-    static final int[] rowDirection = {1, 0, -1, 0};
-    static final int[] columnDirection = {0, -1, 0, 1};
+    private int dfs(int curRow, int curColumn, int houseCount) {
+        visitCheck[curRow][curColumn] = true;
 
-    private int dfs(int row, int column, int count) {
-        Stack<Tuple> stack = new Stack<>();
-        stack.push(new Tuple(row, column));
-        while (true) {
-            if(stack.empty()) return count;
+        for (int i = 0; i < 4; i++) {
+            int nextRow = curRow + rowDirection[i];
+            int nextColumn = curColumn + columnDirection[i];
 
-            Tuple current = stack.pop();
-            for (int k = 0; k < 4; k++) {
-                int nextRow = current.row + rowDirection[k];
-                int nextColumn = current.column + columnDirection[k];
-                if (0 <= nextRow && nextRow < n
-                        && 0 <= nextColumn && nextColumn < n
-                        && map[nextRow][nextColumn] == 1 && check[nextRow][nextColumn] == false) {
-                    check[nextRow][nextColumn] = true;
-                    count++;
-                    stack.push(new Tuple(nextRow, nextColumn));
-                }
+            if (isNextPositionInMapArea(nextRow, nextColumn)
+                    && visitCheck[nextRow][nextColumn] == false
+                    && map[nextRow][nextColumn] == 1) {
+                visitCheck[nextRow][nextColumn] = true;
+                houseCount = dfs(nextRow, nextColumn, houseCount + 1);
             }
         }
+
+        return houseCount;
+    }
+
+    private boolean isNextPositionInMapArea(int nextRow, int nextColumn) {
+        return nextRow >= 0 && nextRow < n && nextColumn >= 0 && nextColumn < n;
     }
 }
