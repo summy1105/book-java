@@ -41,11 +41,11 @@ public class ExBinarySearch {
     @Test
     public void 백준_예제() {
         int n = 5;
-        int[] nList = {4, 1, 5, 2, 3};
+        int[] nArray = {4, 1, 5, 2, 3};
         int m = 5;
-        int[] mList = {1, 3, 7, 9, 5};
+        int[] mArray = {1, 3, 7, 9, 5};
 
-        int[] findList = execute(n, nList, m, mList);
+        int[] findList = execute(n, nArray, m, mArray);
         Assertions.assertThat(findList).containsExactly(1, 1, 0, 0, 1);
         for (int b : findList) {
             System.out.printf("%d\n", b);
@@ -57,11 +57,11 @@ public class ExBinarySearch {
     public void 예제3() {
         // 검색할 값이 모두 배열에 없는 경우
         int n = 5;
-        int[] nList = {100, 200, 300, 400, 500};
+        int[] nArray = {100, 200, 300, 400, 500};
         int m = 4;
-        int[] mList = {10, 20, 30, 40};
+        int[] mArray = {10, 20, 30, 40};
 
-        int[] findList = execute(n, nList, m, mList);
+        int[] findList = execute(n, nArray, m, mArray);
         Assertions.assertThat(findList).containsExactly(0, 0, 0, 0);
     }
 
@@ -69,11 +69,11 @@ public class ExBinarySearch {
     public void 예제4() {
         // 모든 값이 동일한 경우
         int n = 6;
-        int[] nList = {7, 7, 7, 7, 7, 7};
+        int[] nArray = {7, 7, 7, 7, 7, 7};
         int m = 3;
-        int[] mList = {7, 8, 7};
+        int[] mArray = {7, 8, 7};
 
-        int[] findList = execute(n, nList, m, mList);
+        int[] findList = execute(n, nArray, m, mArray);
         Assertions.assertThat(findList).containsExactly(1, 0, 1);
     }
 
@@ -81,11 +81,11 @@ public class ExBinarySearch {
     public void 예제5() {
         // 중복된 값들이 포함된 경우
         int n = 7;
-        int[] nList = {10, 20, 20, 30, 40, 40, 50};
+        int[] nArray = {10, 20, 20, 30, 40, 40, 50};
         int m = 4;
-        int[] mList = {20, 40, 60, 10};
+        int[] mArray = {20, 40, 60, 10};
 
-        int[] findList = execute(n, nList, m, mList);
+        int[] findList = execute(n, nArray, m, mArray);
         Assertions.assertThat(findList).containsExactly(1, 1, 0, 1);
     }
 
@@ -93,34 +93,33 @@ public class ExBinarySearch {
     public void 예제6() {
         // N과 M이 모두 1인 경우
         int n = 1;
-        int[] nList = {5};
+        int[] nArray = {5};
         int m = 1;
-        int[] mList = {5};
+        int[] mArray = {5};
 
-        int[] findList = execute(n, nList, m, mList);
+        int[] findList = execute(n, nArray, m, mArray);
         Assertions.assertThat(findList).containsExactly(1);
     }
 
-    private int[] execute(int n, int[] numberArray, int m, int[] targetNumberArray) {
-        int[] sortedArray = Arrays.stream(numberArray).sorted().toArray();
-
-        int[] resultArray = new int[m];
+    private int[] execute(int n, int[] nArray, int m, int[] mArray) {
+        int[] sortedArray = Arrays.stream(nArray).sorted().toArray();
+        int[] findResult = new int[m];
 
         for (int i = 0; i < m; i++) {
-            int targetNumber = targetNumberArray[i];
-            resultArray[i] = binarySearch(sortedArray, 0, n - 1, targetNumber); // right는 numberArray 배열 갯수 -1
+            findResult[i] = binarySearch(sortedArray, mArray[i], 0, n-1);
         }
-        return resultArray;
+        return findResult;
     }
 
-    private int binarySearch(int[] sortedArray, int left, int right, int targetNumber) {
-        if(right < left) return 0;
-
-        int middle = (left + right) / 2;
-        if(sortedArray[middle] == targetNumber) return 1;
-        else if(sortedArray[middle] > targetNumber)
-            return binarySearch(sortedArray, left, middle - 1, targetNumber); // right 확인 stackoverflow
-        else // if(sortedArray[middle] < targetNumber)
-            return binarySearch(sortedArray, middle + 1, right, targetNumber); // left 확인 stackoverflow
+    private int binarySearch(int[] sortedArray, int findNumber, int left, int right) {
+        if(left > right) return 0;
+        int middleIdx = (left + right) / 2;
+        if(findNumber == sortedArray[middleIdx])
+            return 1;
+        else if (findNumber < sortedArray[middleIdx])
+            return binarySearch(sortedArray, findNumber, left, middleIdx - 1);
+        else // (findNumber > sortedArray[middleIdx])
+            return binarySearch(sortedArray, findNumber, middleIdx + 1, right);
     }
+
 }

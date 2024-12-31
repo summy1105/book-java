@@ -29,29 +29,43 @@ import org.junit.jupiter.api.Test;
 
  */
 public class ExDynamicProgramming {
-    static int n;
     @Test
-    public void test() {
-        n = 2;
+    public void 예제_1() {
+        int n = 2;
         int answer = execute(n);
         Assertions.assertThat(answer).isEqualTo(2);
+    }
 
-        n = 9;
-        answer = execute(n);
+    @Test
+    public void 예제_2() {
+        int n = 9;
+        int answer = execute(n);
         Assertions.assertThat(answer).isEqualTo(55);
     }
 
-    private int execute(int n) {
-        if(n<=2) return n;
-        int sum1 = 1;
-        int sum2 = 2;
-        int answer = 0;
-        for (int i = 3; i <= n; i++) {
-            answer = sum1 + sum2;
-            sum1 = sum2;
-            sum2 = answer;
-        }
+    @Test
+    public void 가장_작은_값() {
+        int n = 1;
+        int answer = execute(n);
+        Assertions.assertThat(answer).isEqualTo(1);
+    }
 
-        return answer % 10_007;
+    @Test
+    public void 가장_큰_값() {
+        int n = 1000;
+        int answer = execute(n);
+        Assertions.assertThat(answer).isLessThan(10_007);
+    }
+
+    private int execute(int n) {
+        if (n <= 2) return n;
+        int memory = 1;
+        int result = 2;
+        for (int i = 3; i <= n ; i++) {
+            int sum = result + memory;
+            memory = result;
+            result = sum;
+        }
+        return result % 10_007;
     }
 }

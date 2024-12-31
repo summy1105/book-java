@@ -1,5 +1,6 @@
 package algo;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -29,32 +30,92 @@ import org.junit.jupiter.api.Test;
 
  */
 public class ExGreedy {
-    static int n; // coin 종류 갯수
-    static int k; // 동전들 합계
-    static int[] coins;
-
     @Test
-    public void test() {
-//        n = 10;
-//        k = 4200;
-//        coins = new int[]{1, 5, 10, 50, 100, 500, 1000, 5000, 10000, 50000};
+    public void 백준_예제1() {
+        int n = 10;
+        int k = 4200;
+        int[] coinValues = {1, 5, 10, 50, 100, 500, 1000, 5000, 10000, 50000};
 
-        n = 10;
-        k = 4790;
-        coins = new int[]{1, 5, 10, 50, 100, 500, 1000, 5000, 10000, 50000};
+        int result = greedy(n, k, coinValues);
 
-        int minCoinCount = greedy(n, k, coins);
-        System.out.println("minCoinCount = " + minCoinCount);
+        Assertions.assertThat(result).isEqualTo(6);
     }
 
-    private int greedy(int n, int k, int[] coins) {
+
+    @Test
+    public void 백준_예제2() {
+        int n = 10;
+        int k = 4790;
+        int[] coinValues = {1, 5, 10, 50, 100, 500, 1000, 5000, 10000, 50000};
+
+        int result = greedy(n, k, coinValues);
+
+        Assertions.assertThat(result).isEqualTo(12);
+    }
+
+    @Test
+    public void 큰_금액() {
+        int n = 5;
+        int k = 1_000_000;
+        int[] coinValues = {1, 10, 100, 1_000, 10_000};
+
+        int result = greedy(n, k, coinValues);
+
+        Assertions.assertThat(result).isEqualTo(100);
+    }
+
+    @Test
+    public void 다양한_배수() {
+        int n = 6;
+        int k = 12345;
+        int[] coinValues = {1, 5, 10, 50, 100, 500};
+
+        int result = greedy(n, k, coinValues);
+
+        Assertions.assertThat(result).isEqualTo(24+3+4+1);
+    }
+
+    @Test
+    public void 큰_동전_부족() {
+        int n = 4;
+        int k = 9999;
+        int[] coinValues = {1, 100, 500, 1000};
+
+        int result = greedy(n, k, coinValues);
+
+        Assertions.assertThat(result).isEqualTo(9+1+4+99);
+    }
+
+    @Test
+    public void 모두_동일한_동전() {
+        int n = 1;
+        int k = 100;
+        int[] coinValues = {1};
+
+        int result = greedy(n, k, coinValues);
+
+        Assertions.assertThat(result).isEqualTo(100);
+    }
+
+    @Test
+    public void 큰_동전의_완벽한_배수() {
+        int n = 3;
+        int k = 3000;
+        int[] coinValues = {1, 100, 1000};
+
+        int result = greedy(n, k, coinValues);
+
+        Assertions.assertThat(result).isEqualTo(3);
+    }
+
+    private int greedy(int n, int k, int[] coinValues) {
         int remain = k;
-        int allCount = 0;
-        for (int i = n - 1; i >= 0; i--) {
-            int coin = coins[i];
-            allCount += (remain / coin);
-            remain = remain % coin;
+        int coinCount = 0;
+        for (int i = n-1; i >=0 ; i--) {
+            int coinValue = coinValues[i];
+            coinCount += (remain / coinValue);
+            remain = remain % coinValue;
         }
-        return allCount;
+        return coinCount;
     }
 }
