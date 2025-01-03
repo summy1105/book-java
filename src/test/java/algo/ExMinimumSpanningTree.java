@@ -2,7 +2,7 @@ package algo;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.junit.jupiter.api.Assertions;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
@@ -58,54 +58,158 @@ import java.util.*;
 */
 public class ExMinimumSpanningTree {
 
-    static int v; // node count
-    static int e; // edge count
-
     @Test
-    public void test() {
-        v = 3;
-        e = 3;
+    public void 예제1() {
+        int v = 3;
+        int e = 3;
         int[][] edgeInfoList = {
                 {1, 2, 1},
                 {2, 3, 2},
                 {1, 3, 3}
         };
 
-        int expected = 3;
-        int result = execute(edgeInfoList);
-        Assertions.assertEquals(expected, result);
+        int result = execute(edgeInfoList, v, e);
+        Assertions.assertThat(result).isEqualTo(3);
     }
 
-    private int execute(int[][] edgeInfoList) {
-        Map<Integer/*node*/, List<int[]>> adjList = new HashMap<>();
-        boolean checkVisitNode[] = new boolean[v + 1];
-        PriorityQueue<int[]> heap = new PriorityQueue<>(e, Comparator.comparingInt(o -> ((int[]) o)[0]));
+    @Test
+    public void 간선_음수_가중치_테스트() {
+        int v = 4;
+        int e = 5;
+        int[][] edgeInfoList = {
+                {1, 2, -5},
+                {1, 3, -10},
+                {3, 4, 2},
+                {2, 4, 1},
+                {2, 3, 3}
+        };
 
-        for (int[] edgeInfo : edgeInfoList) {
-            int aNode = edgeInfo[0];
-            int bNode = edgeInfo[1];
-            int edgeWeight = edgeInfo[2];
+        int result = execute(edgeInfoList, v, e);
+        Assertions.assertThat(result).isEqualTo(-14);
+    }
 
-            List<int[]> connectedANodeList = adjList.getOrDefault(aNode, new ArrayList<>());
-            connectedANodeList.add(new int[]{edgeWeight, bNode});
-            adjList.putIfAbsent(aNode, connectedANodeList);
-
-            List<int[]> connectedBNodeList = adjList.getOrDefault(bNode, new ArrayList<>());
-            connectedBNodeList.add(new int[]{edgeWeight, aNode});
-            adjList.putIfAbsent(bNode, connectedBNodeList);
+    @Test
+    public void 같은_간선_값() {
+        int v = 1000;
+        int e = 1000;
+        int[][] edgeInfoList = new int[e][3];
+        for (int i = 0; i < e; i++) {
+            edgeInfoList[i][0] = i % v + 1;
+            edgeInfoList[i][1] = (i + 1) % v + 1;
+            edgeInfoList[i][2] = 1000;
         }
 
-        heap.offer(new int[]{0, 1});
+        int result = execute(edgeInfoList, v, e);
+        Assertions.assertThat(result).isEqualTo((1000-1)*1000);
+    }
+
+    @Test
+    public void 단일_간선_테스트() {
+        int v = 2;
+        int e = 1;
+        int[][] edgeInfoList = {
+                {1, 2, 100}
+        };
+
+        int result = execute(edgeInfoList, v, e);
+        Assertions.assertThat(result).isEqualTo(100);
+    }
+
+    @Test
+    public void 완전_그래프_테스트() {
+        int v = 5;
+        int e = 10;
+        int[][] edgeInfoList = {
+                {1, 2, 2},
+                {1, 3, 3},
+                {1, 4, 1},
+                {1, 5, 4},
+                {2, 3, 3},
+                {2, 4, 2},
+                {2, 5, 5},
+                {3, 4, 1},
+                {3, 5, 7},
+                {4, 5, 6}
+        };
+
+        int result = execute(edgeInfoList, v, e);
+        Assertions.assertThat(result).isEqualTo(8);
+    }
+
+    @Test
+    public void 음수_양수_혼합_가중치() {
+        int v = 6;
+        int e = 8;
+        int[][] edgeInfoList = {
+                {1, 2, -4},
+                {1, 3, 2},
+                {2, 3, 3},
+                {2, 4, -1},
+                {3, 5, 4},
+                {4, 5, -2},
+                {4, 6, 6},
+                {5, 6, -3}
+        };
+
+        int result = execute(edgeInfoList, v, e);
+        Assertions.assertThat(result).isEqualTo(-8);
+    }
+
+
+    @Test
+    public void 큰_가중치_테스트() {
+        int v = 3;
+        int e = 3;
+        int[][] edgeInfoList = {
+                {1, 2, 1000000},
+                {2, 3, 1000000},
+                {1, 3, 1000000}
+        };
+
+        int result = execute(edgeInfoList, v, e);
+        Assertions.assertThat(result).isEqualTo(2000000);
+    }
+
+    @AllArgsConstructor
+    @Getter
+    static private class EdgeInfo{
+        int curVertex;
+        int edgeWeight;
+    }
+
+    private int execute(int[][] edgeInfoList, int v, int e) {
+        Map<Integer, List<int[]>> adjacencyList = new HashMap<>();
+        for (int[] edgeInfo : edgeInfoList) {
+            int vertexA = edgeInfo[0];
+            int vertexB = edgeInfo[1];
+            int edgeWeight = edgeInfo[2];
+
+            List<int[]> aList = adjacencyList.getOrDefault(vertexA, new ArrayList<>());
+            aList.add(new int[]{vertexB, edgeWeight});
+            adjacencyList.putIfAbsent(vertexA, aList);
+
+            List<int[]> bList = adjacencyList.getOrDefault(vertexB, new ArrayList<>());
+            bList.add(new int[]{vertexA, edgeWeight});
+            adjacencyList.putIfAbsent(vertexB, bList);
+        }
+
+        PriorityQueue<EdgeInfo> heap = new PriorityQueue<>(Comparator.comparing(EdgeInfo::getEdgeWeight));
+        heap.offer(new EdgeInfo(1, 0));
+        boolean[] visitVertex = new boolean[v + 1];
 
         int result = 0;
+
         while (!heap.isEmpty()) {
-            int[] curNode = heap.poll();
-            if (checkVisitNode[curNode[1]] == false) {
-                checkVisitNode[curNode[1]] = true;
-                result += curNode[0];
-                List<int[]> nextNodes = adjList.get(curNode[1]);
-                for (int[] nextEdge : nextNodes) {
-                    heap.offer(nextEdge);
+            EdgeInfo minEdge = heap.poll();
+            if(visitVertex[minEdge.curVertex]) continue;
+
+            visitVertex[minEdge.curVertex] = true;
+            result += minEdge.getEdgeWeight();
+
+            for ( int[] nextVerNEdge : adjacencyList.get(minEdge.curVertex)) {
+                int nextVertex = nextVerNEdge[0];
+                if (visitVertex[nextVertex] == false) {
+                    heap.offer(new EdgeInfo(nextVertex, nextVerNEdge[1]));
                 }
             }
         }
@@ -113,40 +217,4 @@ public class ExMinimumSpanningTree {
         return result;
     }
 
-
-//    private int execute(int[][] edgeInfoList) {
-//        Map<Integer/*node number*/, List<int[]>/*edge info*/> edgeAdjacencyList = new HashMap<>();
-//        PriorityQueue<int[]> heap = new PriorityQueue(e, Comparator.comparingInt(a -> ((int[]) a)[0]));
-//        boolean[] visitCheck = new boolean[v + 1];
-//
-//        for (int[] nodeNEdge : edgeInfoList) {
-//            int aNode = nodeNEdge[0];
-//            int bNode = nodeNEdge[1];
-//            int betweenWeight = nodeNEdge[2];
-//
-//            List<int[]> edgeOfANode = edgeAdjacencyList.getOrDefault(aNode, new ArrayList<>());
-//            edgeOfANode.add(new int[]{betweenWeight, bNode});
-//            edgeAdjacencyList.putIfAbsent(aNode, edgeOfANode);
-//
-//            List<int[]> edgeOfBNode = edgeAdjacencyList.getOrDefault(bNode, new ArrayList<>());
-//            edgeOfBNode.add(new int[]{betweenWeight, aNode});
-//            edgeAdjacencyList.putIfAbsent(bNode, edgeOfBNode);
-//        }
-//
-//        heap.offer(new int[]{0, 1});
-//        int result = 0;
-//        while (!heap.isEmpty()) {
-//            int[] eachNode = heap.poll();
-//            if (visitCheck[eachNode[1]] == false) {
-//                visitCheck[eachNode[1]] = true;
-//                result += eachNode[0];
-//
-//                for (int[] nextEdge : edgeAdjacencyList.get(eachNode[1])) {
-//                    if (visitCheck[nextEdge[1]] == false)
-//                        heap.offer(nextEdge);
-//                }
-//            }
-//        }
-//        return result;
-//    }
 }
