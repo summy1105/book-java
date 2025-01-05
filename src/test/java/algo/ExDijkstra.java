@@ -53,9 +53,9 @@ public class ExDijkstra {
 
     @Test
     public void test() {
-        int vertexCount = 5;
-        int edgeCount = 6;
-        int k_startVertex = 1;
+        int v = 5;
+        int e = 6;
+        int k = 1;
 
         int[][] maps = {
                 {5, 1, 1},
@@ -66,7 +66,7 @@ public class ExDijkstra {
                 {3, 4, 6}
         };
 
-        int[] distances = execute(vertexCount, edgeCount, k_startVertex, maps);
+        int[] distances = execute(v, e, k, maps);
 
         Assertions.assertThat(distances).containsExactly(-1, 0, 2, 3, 7, Integer.MAX_VALUE);
 
@@ -78,43 +78,110 @@ public class ExDijkstra {
         }
     }
 
-    private int[] execute(int vertexCount, int edgeCount, int k_startVertex, int[][] maps) {
-        int[] distance = new int[vertexCount + 1];
-        Map<Integer, List<int[]>> adjacencyList = new HashMap<>();
-        PriorityQueue<int[]> heap = new PriorityQueue<>(edgeCount, Comparator.comparingInt(o -> ((int[]) o)[0]));
+    @Test
+    public void 단일_노드() {
+        int v = 1;
+        int e = 1;
+        int k = 1;
 
+        int[][] maps = {
+                {1, 1, 1}
+        };
+
+        int[] distances = execute(v, e, k, maps);
+
+        Assertions.assertThat(distances).containsExactly(-1, 0);
+    }
+
+    @Test
+    public void 연결되지_않은_노드() {
+        int v = 4;
+        int e = 2;
+        int k = 1;
+
+        int[][] maps = {
+                {1, 2, 3},
+                {1, 3, 5}
+        };
+
+        int[] distances = execute(v, e, k, maps);
+
+        Assertions.assertThat(distances).containsExactly(-1, 0, 3, 5, Integer.MAX_VALUE);
+    }
+
+    @Test
+    public void 사이클_존재() {
+        int v = 4;
+        int e = 4;
+        int k = 1;
+
+        int[][] maps = {
+                {1, 2, 2},
+                {2, 3, 2},
+                {3, 4, 2},
+                {4, 2, 1}
+        };
+
+        int[] distances = execute(v, e, k, maps);
+
+        Assertions.assertThat(distances).containsExactly(-1, 0, 2, 4, 6);
+    }
+
+    @Test
+    public void 큰_입력_테스트() {
+        int v = 20_000;
+        int e = 30_000;
+        int k = 1;
+
+        int[][] maps = new int[e][3];
+        for (int i = 0; i < e; i++) {
+            maps[i] = new int[]{(i + 1) % (v + 1), (i + 2) % (v + 1), 10};
+        }
+
+        int[] distances = execute(v, e, k, maps);
+
+        int[] expected = new int[v + 1];
+        expected[0] = -1;
+        for (int i = 0; i < v ; i++) {
+            expected[i + 1] = i * 10;
+        }
+        Assertions.assertThat(distances).containsExactly(expected);
+    }
+
+    private int[] execute(int vertexCount, int edgeCount, int kStartVertex, int[][] maps) {
+        Map<Integer, List<int[]>> adjacencyList = new HashMap<>();
+        for (int[] map : maps) {
+            int vertexFrom = map[0];
+            int vertexTo = map[1];
+            int edgeWeight = map[2];
+
+            List<int[]> edgeList = adjacencyList.getOrDefault(vertexFrom, new ArrayList<>());
+            edgeList.add(new int[]{vertexTo, edgeWeight});
+            adjacencyList.putIfAbsent(vertexFrom, edgeList);
+        }
+
+        int[] distance = new int[vertexCount + 1];
         distance[0] = -1;
-        for (int i = 1; i <= vertexCount; i++) {
+        for (int i = 1; i <=vertexCount ; i++) {
             distance[i] = Integer.MAX_VALUE;
         }
 
-        for (int[] map : maps) {
-            int aVertex = map[0];
-            int bVertex = map[1];
-            int edgeWeight = map[2];
+        PriorityQueue<int[]> heap = new PriorityQueue<>(Comparator.comparingInt((int[] o) -> o[1]));
+        heap.add(new int[]{kStartVertex, 0});
+        distance[kStartVertex] = 0;
 
-            List<int[]> connectedAVertexList = adjacencyList.getOrDefault(aVertex, new ArrayList<>());
-            connectedAVertexList.add(new int[]{edgeWeight, bVertex});
-            adjacencyList.putIfAbsent(aVertex, connectedAVertexList);
-
-        }
-
-        heap.offer(new int[]{0, k_startVertex});
-        distance[k_startVertex] = 0;
         while (!heap.isEmpty()) {
-            int[] current = heap.poll();
-            int curWeight = current[0];
-            int curVertex = current[1];
+            int[] middle = heap.poll();
+            int midVertex = middle[0];
+            int midWeight = middle[1];
+            if(distance[midVertex] != midWeight) continue;
 
-            if(distance[curVertex] != curWeight) continue;
-
-            List<int[]> nexts = adjacencyList.getOrDefault(curVertex, new ArrayList<>());
-            for (int[] next : nexts) {
-                int nextEdgeWeight = next[0];
-                int nextVertex = next[1];
-                if (distance[nextVertex] > curWeight + nextEdgeWeight) {
-                    distance[nextVertex] = curWeight + nextEdgeWeight;
-                    heap.offer(new int[]{curWeight + nextEdgeWeight, nextVertex});
+            for ( int[] next : adjacencyList.getOrDefault(midVertex, new ArrayList<>())) {
+                int nextVertex = next[0];
+                int nextWeight = next[1] + midWeight;
+                if (distance[nextVertex] > nextWeight) {
+                    distance[nextVertex] = nextWeight;
+                    heap.offer(new int[]{nextVertex, nextWeight});
                 }
             }
         }
