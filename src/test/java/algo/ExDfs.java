@@ -59,6 +59,47 @@ public class ExDfs {
         houseCountList.stream().sorted(Integer::compareTo).forEach(System.out::println);
     }
 
+    private List<Integer> execute() {
+        List<Integer> houseCountList = new ArrayList<>();
+
+        for (int row = 0; row < n; row++) {
+            for (int column = 0; column < n; column++) {
+                if (visitCheck[row][column] == false
+                        && map[row][column] == 1) {
+                    houseCountList.add(dfs(row, column, 1));
+                }
+            }
+        }
+
+        return houseCountList.stream().sorted(Integer::compareTo).collect(Collectors.toList());
+    }
+
+    // 3, 6, 9, 12 시 방향
+    static final int[] rowDirection = {0, 1, 0, -1};
+    static final int[] columnDirection = {1, 0, -1, 0};
+
+    private int dfs(int curRow, int curColumn, int houseCount) {
+        visitCheck[curRow][curColumn] = true;
+
+        for (int i = 0; i < 4; i++) {
+            int nextRow = curRow + rowDirection[i];
+            int nextColumn = curColumn + columnDirection[i];
+
+            if (isNextPositionInMapArea(nextRow, nextColumn)
+                    && visitCheck[nextRow][nextColumn] == false
+                    && map[nextRow][nextColumn] == 1) {
+                visitCheck[nextRow][nextColumn] = true;
+                houseCount = dfs(nextRow, nextColumn, houseCount + 1);
+            }
+        }
+
+        return houseCount;
+    }
+
+    private boolean isNextPositionInMapArea(int nextRow, int nextColumn) {
+        return nextRow >= 0 && nextRow < n && nextColumn >= 0 && nextColumn < n;
+    }
+
     @Test
     public void 전체가_빈_공간() {
         n = 5;
@@ -141,46 +182,5 @@ public class ExDfs {
 
         Assertions.assertThat(houseCountList.size()).isEqualTo(13);
         Assertions.assertThat(houseCountList).containsExactly(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
-    }
-
-    private List<Integer> execute() {
-        List<Integer> houseCountList = new ArrayList<>();
-
-        for (int row = 0; row < n; row++) {
-            for (int column = 0; column < n; column++) {
-                if (visitCheck[row][column] == false
-                        && map[row][column] == 1) {
-                    houseCountList.add(dfs(row, column, 1));
-                }
-            }
-        }
-
-        return houseCountList.stream().sorted(Integer::compareTo).collect(Collectors.toList());
-    }
-
-    // 3, 6, 9, 12 시 방향
-    static final int[] rowDirection = {0, 1, 0, -1};
-    static final int[] columnDirection = {1, 0, -1, 0};
-
-    private int dfs(int curRow, int curColumn, int houseCount) {
-        visitCheck[curRow][curColumn] = true;
-
-        for (int i = 0; i < 4; i++) {
-            int nextRow = curRow + rowDirection[i];
-            int nextColumn = curColumn + columnDirection[i];
-
-            if (isNextPositionInMapArea(nextRow, nextColumn)
-                    && visitCheck[nextRow][nextColumn] == false
-                    && map[nextRow][nextColumn] == 1) {
-                visitCheck[nextRow][nextColumn] = true;
-                houseCount = dfs(nextRow, nextColumn, houseCount + 1);
-            }
-        }
-
-        return houseCount;
-    }
-
-    private boolean isNextPositionInMapArea(int nextRow, int nextColumn) {
-        return nextRow >= 0 && nextRow < n && nextColumn >= 0 && nextColumn < n;
     }
 }

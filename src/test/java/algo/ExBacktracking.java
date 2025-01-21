@@ -51,6 +51,32 @@ public class ExBacktracking {
         Assertions.assertThat(list.size()).isEqualTo(factorialUsingStreams(n, m));
     }
 
+    public int factorialUsingStreams(int n, int m) {
+        return IntStream.rangeClosed(n-m+1, n)
+                .reduce(1, (int x, int y) -> x * y);
+    }
+
+    List<int[]> execute(int n, int m) {
+        List<int[]> list = new ArrayList<>();
+        backtracking(list, n, m, 0, new int[m], new boolean[n+1]);
+        return list;
+    }
+
+    private void backtracking(List<int[]> list, int n, int m, int depth, int[] stack, boolean[] visit) {
+        if (depth >= m) {
+            list.add(stack.clone());
+            return;
+        }
+        for (int i = 1; i <=n ; i++) {
+            if(visit[i]) continue;
+
+            stack[depth] = i;
+            visit[i] = true;
+            backtracking(list, n, m, depth + 1, stack, visit);
+            visit[i] = false;
+        }
+    }
+
     @Test
     public void 백준_예제2() {
         int n = 4;
@@ -86,31 +112,5 @@ public class ExBacktracking {
         List<int[]> list = execute(n, m);
         System.out.println("list.size() = " + list.size());
         Assertions.assertThat(list.size()).isEqualTo(factorialUsingStreams(n, m));
-    }
-
-    public int factorialUsingStreams(int n, int m) {
-        return IntStream.rangeClosed(n-m+1, n)
-                .reduce(1, (int x, int y) -> x * y);
-    }
-
-    List<int[]> execute(int n, int m) {
-        List<int[]> list = new ArrayList<>();
-        backtracking(list, n, m, 0, new int[m], new boolean[n+1]);
-        return list;
-    }
-
-    private void backtracking(List<int[]> list, int n, int m, int depth, int[] stack, boolean[] visit) {
-        if (depth >= m) {
-            list.add(stack.clone());
-            return;
-        }
-        for (int i = 1; i <=n ; i++) {
-            if(visit[i]) continue;
-
-            stack[depth] = i;
-            visit[i] = true;
-            backtracking(list, n, m, depth + 1, stack, visit);
-            visit[i] = false;
-        }
     }
 }

@@ -65,6 +65,80 @@ public class ExBfs {
         System.out.println(paintInfo.maxArea);
     }
 
+    static private class PaintInfo{
+        int count;
+        int maxArea;
+
+        PaintInfo(int count, int maxArea) {
+            this.count = count;
+            this.maxArea = maxArea;
+        }
+    }
+
+    private PaintInfo execute() {
+        int cnt = 0;
+        int maxValue = 0;
+
+        for (int row = 0; row < maxRow; row++) {
+            for (int column = 0; column < maxColumn; column++) {
+                if( check[row][column] == false
+                        && map[row][column] == 1){
+                    cnt++;
+                    maxValue = Math.max(maxValue, bfs(row, column));
+                }
+            }
+        }
+
+        return new PaintInfo(cnt, maxValue);
+    }
+
+    static private class Position {
+        int row;
+        int column;
+
+        Position(int row, int column) {
+            this.row = row;
+            this.column = column;
+        }
+    }
+
+    // 3, 6, 9, 12
+    static final int[] rowDirection = {0, 1, 0, -1};
+    static final int[] columnDirection = {1, 0, -1, 0};
+
+    // queue 사용
+    private int bfs(int curRow, int curColumn) {
+        int areaValue = 1;
+        check[curRow][curColumn] = true;
+
+        Queue<Position> queue = new LinkedList<>();
+        queue.add(new Position(curRow, curColumn));
+
+        while (!queue.isEmpty()) {
+            Position curPosition = queue.poll();
+            for (int i = 0; i < 4; i++) {
+                int nextRow = curPosition.row + rowDirection[i];
+                int nextColumn = curPosition.column + columnDirection[i];
+
+                if (isNextPositionInMapArea(nextRow, nextColumn)
+                        && check[nextRow][nextColumn] == false
+                        && map[nextRow][nextColumn] == 1
+                ) {
+                    check[nextRow][nextColumn] = true;
+                    areaValue++;
+                    queue.add(new Position(nextRow, nextColumn));
+                }
+            }
+        }
+
+        return areaValue;
+    }
+
+    private boolean isNextPositionInMapArea(int nextRow, int nextColumn) {
+        return nextRow >= 0 && nextRow < maxRow
+                && nextColumn >= 0 && nextColumn < maxColumn;
+    }
+
     @Test
     void 모든_셀이_빈_공간() {
         maxRow = 4;
@@ -134,79 +208,5 @@ public class ExBfs {
 
         Assertions.assertThat(paintInfo.count).isEqualTo(1);
         Assertions.assertThat(paintInfo.maxArea).isEqualTo(9);
-    }
-
-    static private class PaintInfo{
-        int count;
-        int maxArea;
-
-        PaintInfo(int count, int maxArea) {
-            this.count = count;
-            this.maxArea = maxArea;
-        }
-    }
-
-    private PaintInfo execute() {
-        int cnt = 0;
-        int maxValue = 0;
-
-        for (int row = 0; row < maxRow; row++) {
-            for (int column = 0; column < maxColumn; column++) {
-                if( check[row][column] == false
-                    && map[row][column] == 1){
-                    cnt++;
-                    maxValue = Math.max(maxValue, bfs(row, column));
-                }
-            }
-        }
-
-        return new PaintInfo(cnt, maxValue);
-    }
-
-    static private class Position {
-        int row;
-        int column;
-
-        Position(int row, int column) {
-            this.row = row;
-            this.column = column;
-        }
-    }
-
-    // 3, 6, 9, 12
-    static final int[] rowDirection = {0, 1, 0, -1};
-    static final int[] columnDirection = {1, 0, -1, 0};
-
-    // queue 사용
-    private int bfs(int curRow, int curColumn) {
-        int areaValue = 1;
-        check[curRow][curColumn] = true;
-
-        Queue<Position> queue = new LinkedList<>();
-        queue.add(new Position(curRow, curColumn));
-
-        while (!queue.isEmpty()) {
-            Position curPosition = queue.poll();
-            for (int i = 0; i < 4; i++) {
-                int nextRow = curPosition.row + rowDirection[i];
-                int nextColumn = curPosition.column + columnDirection[i];
-
-                if (isNextPositionInMapArea(nextRow, nextColumn)
-                        && check[nextRow][nextColumn] == false
-                        && map[nextRow][nextColumn] == 1
-                ) {
-                    check[nextRow][nextColumn] = true;
-                    areaValue++;
-                    queue.add(new Position(nextRow, nextColumn));
-                }
-            }
-        }
-
-        return areaValue;
-    }
-
-    private boolean isNextPositionInMapArea(int nextRow, int nextColumn) {
-        return nextRow >= 0 && nextRow < maxRow
-                && nextColumn >= 0 && nextColumn < maxColumn;
     }
 }

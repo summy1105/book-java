@@ -62,6 +62,26 @@ public class ExTwoPointer {
         System.out.println(answer);
     }
 
+    private int execute(int temperatureListLength, int continuousDateNumber, int[] temperatureList) {
+        int aPoint = 0;
+        int bPoint = 0;
+        int continuousSumTemperature = 0;
+
+        for ( ; bPoint < continuousDateNumber ; bPoint++) {
+            continuousSumTemperature += temperatureList[bPoint];
+        }
+
+        int maxSum = continuousSumTemperature;
+
+        for ( ; bPoint < temperatureListLength; bPoint++, aPoint++) {
+            continuousSumTemperature -= temperatureList[aPoint];
+            continuousSumTemperature += temperatureList[bPoint];
+            maxSum = Math.max(maxSum, continuousSumTemperature);
+        }
+
+        return maxSum;
+    }
+
     @Test
     public void 백준_예제2() {
         int temperatureListLength = 10;
@@ -135,26 +155,6 @@ public class ExTwoPointer {
 
         int answer = execute(temperatureListLength, continuousDateNumber, temperatureList);
         Assertions.assertThat(answer).isEqualTo(0); // 합: [0, 0, 0]
-    }
-
-    private int execute(int temperatureListLength, int continuousDateNumber, int[] temperatureList) {
-        int aPoint = 0;
-        int bPoint = 0;
-        int continuousSumTemperature = 0;
-
-        for ( ; bPoint < continuousDateNumber ; bPoint++) {
-            continuousSumTemperature += temperatureList[bPoint];
-        }
-
-        int maxSum = continuousSumTemperature;
-
-        for ( ; bPoint < temperatureListLength; bPoint++, aPoint++) {
-            continuousSumTemperature -= temperatureList[aPoint];
-            continuousSumTemperature += temperatureList[bPoint];
-            maxSum = Math.max(maxSum, continuousSumTemperature);
-        }
-
-        return maxSum;
     }
 
 }

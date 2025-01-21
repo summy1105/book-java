@@ -72,6 +72,53 @@ public class ExMinimumSpanningTree {
         Assertions.assertThat(result).isEqualTo(3);
     }
 
+    @AllArgsConstructor
+    @Getter
+    static private class EdgeInfo{
+        int curVertex;
+        int edgeWeight;
+    }
+
+    private int execute(int[][] edgeInfoList, int v, int e) {
+        Map<Integer, List<int[]>> adjacencyList = new HashMap<>();
+        for (int[] edgeInfo : edgeInfoList) {
+            int vertexA = edgeInfo[0];
+            int vertexB = edgeInfo[1];
+            int edgeWeight = edgeInfo[2];
+
+            List<int[]> aList = adjacencyList.getOrDefault(vertexA, new ArrayList<>());
+            aList.add(new int[]{vertexB, edgeWeight});
+            adjacencyList.putIfAbsent(vertexA, aList);
+
+            List<int[]> bList = adjacencyList.getOrDefault(vertexB, new ArrayList<>());
+            bList.add(new int[]{vertexA, edgeWeight});
+            adjacencyList.putIfAbsent(vertexB, bList);
+        }
+
+        PriorityQueue<EdgeInfo> heap = new PriorityQueue<>(Comparator.comparing(EdgeInfo::getEdgeWeight));
+        heap.offer(new EdgeInfo(1, 0));
+        boolean[] visitVertex = new boolean[v + 1];
+
+        int result = 0;
+
+        while (!heap.isEmpty()) {
+            EdgeInfo minEdge = heap.poll();
+            if(visitVertex[minEdge.curVertex]) continue;
+
+            visitVertex[minEdge.curVertex] = true;
+            result += minEdge.getEdgeWeight();
+
+            for ( int[] nextVerNEdge : adjacencyList.get(minEdge.curVertex)) {
+                int nextVertex = nextVerNEdge[0];
+                if (visitVertex[nextVertex] == false) {
+                    heap.offer(new EdgeInfo(nextVertex, nextVerNEdge[1]));
+                }
+            }
+        }
+
+        return result;
+    }
+
     @Test
     public void 간선_음수_가중치_테스트() {
         int v = 4;
@@ -168,53 +215,6 @@ public class ExMinimumSpanningTree {
 
         int result = execute(edgeInfoList, v, e);
         Assertions.assertThat(result).isEqualTo(2000000);
-    }
-
-    @AllArgsConstructor
-    @Getter
-    static private class EdgeInfo{
-        int curVertex;
-        int edgeWeight;
-    }
-
-    private int execute(int[][] edgeInfoList, int v, int e) {
-        Map<Integer, List<int[]>> adjacencyList = new HashMap<>();
-        for (int[] edgeInfo : edgeInfoList) {
-            int vertexA = edgeInfo[0];
-            int vertexB = edgeInfo[1];
-            int edgeWeight = edgeInfo[2];
-
-            List<int[]> aList = adjacencyList.getOrDefault(vertexA, new ArrayList<>());
-            aList.add(new int[]{vertexB, edgeWeight});
-            adjacencyList.putIfAbsent(vertexA, aList);
-
-            List<int[]> bList = adjacencyList.getOrDefault(vertexB, new ArrayList<>());
-            bList.add(new int[]{vertexA, edgeWeight});
-            adjacencyList.putIfAbsent(vertexB, bList);
-        }
-
-        PriorityQueue<EdgeInfo> heap = new PriorityQueue<>(Comparator.comparing(EdgeInfo::getEdgeWeight));
-        heap.offer(new EdgeInfo(1, 0));
-        boolean[] visitVertex = new boolean[v + 1];
-
-        int result = 0;
-
-        while (!heap.isEmpty()) {
-            EdgeInfo minEdge = heap.poll();
-            if(visitVertex[minEdge.curVertex]) continue;
-
-            visitVertex[minEdge.curVertex] = true;
-            result += minEdge.getEdgeWeight();
-
-            for ( int[] nextVerNEdge : adjacencyList.get(minEdge.curVertex)) {
-                int nextVertex = nextVerNEdge[0];
-                if (visitVertex[nextVertex] == false) {
-                    heap.offer(new EdgeInfo(nextVertex, nextVerNEdge[1]));
-                }
-            }
-        }
-
-        return result;
     }
 
 }

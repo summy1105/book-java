@@ -48,6 +48,46 @@ public class ExSimulation {
         System.out.println(cleanSectionCount);
     }
 
+    // 북, 동, 남, 서
+    final private int[] rowDirection = {-1, 0, 1, 0};
+    final private int[] columnDirection = {0, 1, 0, -1};
+
+    private int simulation(int[][] map, int[] robotPosition) {
+        int count = 0;
+        int robotRow = robotPosition[0];
+        int robotColumn = robotPosition[1];
+        int robotDirection = robotPosition[2];
+        while (true) {
+            if(map[robotRow][robotColumn] == 0) {
+                map[robotRow][robotColumn] = 2;
+                count++;
+            }
+            boolean isMovedNext = false;
+            for (int i = 0; i < 4; i++) {
+                int nextDirection = (robotDirection +3 - i ) % 4; // 청소 구역이 있을 때, 현재 방향에서 다음 반시계 방향으로 먼저 회전함!!
+                int nextRow = robotRow + rowDirection[nextDirection];
+                int nextColumn = robotColumn + columnDirection[nextDirection];
+                if (  map[nextRow][nextColumn] == 0) {
+                    robotRow = nextRow;
+                    robotColumn = nextColumn;
+                    robotDirection = nextDirection;
+                    isMovedNext = true;
+                    break;
+                }
+            }
+            if(isMovedNext) continue;
+            int backRow = robotRow - rowDirection[robotDirection];
+            int backColumn = robotColumn - columnDirection[robotDirection];
+            if (map[backRow][backColumn] == 2) {
+                robotRow = backRow;
+                robotColumn = backColumn;
+            } else {
+                break;
+            }
+        }
+        return count;
+    }
+
     @Test
     public void 백준_예제2() {
         int n = 11; // rowCount
@@ -126,45 +166,5 @@ public class ExSimulation {
         Assertions.assertThat(cleanSectionCount).isEqualTo(26);
 
         System.out.println(cleanSectionCount);
-    }
-
-    // 북, 동, 남, 서
-    final private int[] rowDirection = {-1, 0, 1, 0};
-    final private int[] columnDirection = {0, 1, 0, -1};
-
-    private int simulation(int[][] map, int[] robotPosition) {
-        int count = 0;
-        int robotRow = robotPosition[0];
-        int robotColumn = robotPosition[1];
-        int robotDirection = robotPosition[2];
-        while (true) {
-            if(map[robotRow][robotColumn] == 0) {
-                map[robotRow][robotColumn] = 2;
-                count++;
-            }
-            boolean isMovedNext = false;
-            for (int i = 0; i < 4; i++) {
-                int nextDirection = (robotDirection +3 - i ) % 4; // 청소 구역이 있을 때, 현재 방향에서 다음 반시계 방향으로 먼저 회전함!!
-                int nextRow = robotRow + rowDirection[nextDirection];
-                int nextColumn = robotColumn + columnDirection[nextDirection];
-                if (  map[nextRow][nextColumn] == 0) {
-                    robotRow = nextRow;
-                    robotColumn = nextColumn;
-                    robotDirection = nextDirection;
-                    isMovedNext = true;
-                    break;
-                }
-            }
-            if(isMovedNext) continue;
-            int backRow = robotRow - rowDirection[robotDirection];
-            int backColumn = robotColumn - columnDirection[robotDirection];
-            if (map[backRow][backColumn] == 2) {
-                robotRow = backRow;
-                robotColumn = backColumn;
-            } else {
-                break;
-            }
-        }
-        return count;
     }
 }

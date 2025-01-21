@@ -77,6 +77,46 @@ public class ExFloydWarshall {
         }
     }
 
+    private int[][] execute(int n, int m, int[][] edgeWeightArray) {
+        int MAX_SUM_WEIGHT = (n - 1) * MAX_EDGE_WEIGHT + 1; // integer max값으로 하면 overflow현상 발생
+
+        int[][] floydWeight = new int[n + 1][n + 1];
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= n; j++) {
+                floydWeight[i][j] = MAX_SUM_WEIGHT;
+            }
+        }
+        for (int i = 1; i <=n ; i++) {
+            floydWeight[i][i] = 0;
+        }
+        for (int[] busInfo : edgeWeightArray) {
+            int aCity = busInfo[0];
+            int bCity = busInfo[1];
+            int weight = busInfo[2];
+
+            floydWeight[aCity][bCity] = Math.min(floydWeight[aCity][bCity], weight); // 중요!!
+        }
+
+        for (int midCity = 1; midCity <= n ; midCity++) {
+            for (int startCity = 1; startCity <= n; startCity++) {
+                for (int endCity = 1; endCity <=n ; endCity++) {
+                    if (floydWeight[startCity][endCity] > floydWeight[startCity][midCity] + floydWeight[midCity][endCity]) {
+                        floydWeight[startCity][endCity] = floydWeight[startCity][midCity] + floydWeight[midCity][endCity];
+                    }
+                }
+            }
+        }
+
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= n; j++) {
+                if (floydWeight[i][j] >= MAX_SUM_WEIGHT)
+                    floydWeight[i][j] = 0;
+            }
+            floydWeight[i] = Arrays.copyOfRange(floydWeight[i], 1, n + 1);
+        }
+        return Arrays.copyOfRange(floydWeight, 1, n + 1);
+    }
+
     @Test
     public void 예제1() {
         int n = 3;
@@ -208,45 +248,5 @@ public class ExFloydWarshall {
         for (int i = 0; i < floydWeight.length; i++) {
             Assertions.assertThat(floydWeight[i]).containsExactly(expected[i]);
         }
-    }
-
-    private int[][] execute(int n, int m, int[][] edgeWeightArray) {
-        int MAX_SUM_WEIGHT = (n - 1) * MAX_EDGE_WEIGHT + 1; // integer max값으로 하면 overflow현상 발생
-
-        int[][] floydWeight = new int[n + 1][n + 1];
-        for (int i = 1; i <= n; i++) {
-            for (int j = 1; j <= n; j++) {
-                floydWeight[i][j] = MAX_SUM_WEIGHT;
-            }
-        }
-        for (int i = 1; i <=n ; i++) {
-            floydWeight[i][i] = 0;
-        }
-        for (int[] busInfo : edgeWeightArray) {
-            int aCity = busInfo[0];
-            int bCity = busInfo[1];
-            int weight = busInfo[2];
-
-            floydWeight[aCity][bCity] = Math.min(floydWeight[aCity][bCity], weight); // 중요!!
-        }
-
-        for (int midCity = 1; midCity <= n ; midCity++) {
-            for (int startCity = 1; startCity <= n; startCity++) {
-                for (int endCity = 1; endCity <=n ; endCity++) {
-                    if (floydWeight[startCity][endCity] > floydWeight[startCity][midCity] + floydWeight[midCity][endCity]) {
-                        floydWeight[startCity][endCity] = floydWeight[startCity][midCity] + floydWeight[midCity][endCity];
-                    }
-                }
-            }
-        }
-
-        for (int i = 1; i <= n; i++) {
-            for (int j = 1; j <= n; j++) {
-                if (floydWeight[i][j] >= MAX_SUM_WEIGHT)
-                    floydWeight[i][j] = 0;
-            }
-            floydWeight[i] = Arrays.copyOfRange(floydWeight[i], 1, n + 1);
-        }
-        return Arrays.copyOfRange(floydWeight, 1, n + 1);
     }
 }

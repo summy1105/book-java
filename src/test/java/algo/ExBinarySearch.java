@@ -52,6 +52,27 @@ public class ExBinarySearch {
         }
     }
 
+    private int[] execute(int n, int[] nArray, int m, int[] mArray) {
+        int[] sortedArray = Arrays.stream(nArray).sorted().toArray();
+        int[] findResult = new int[m];
+
+        for (int i = 0; i < m; i++) {
+            findResult[i] = binarySearch(sortedArray, mArray[i], 0, n-1);
+        }
+        return findResult;
+    }
+
+    private int binarySearch(int[] sortedArray, int findNumber, int left, int right) {
+        if(left > right) return 0;
+        int middleIdx = (left + right) / 2;
+        if(findNumber == sortedArray[middleIdx])
+            return 1;
+        else if (findNumber < sortedArray[middleIdx])
+            return binarySearch(sortedArray, findNumber, left, middleIdx - 1);
+        else // (findNumber > sortedArray[middleIdx])
+            return binarySearch(sortedArray, findNumber, middleIdx + 1, right);
+    }
+
 
     @Test
     public void 예제3() {
@@ -99,27 +120,6 @@ public class ExBinarySearch {
 
         int[] findList = execute(n, nArray, m, mArray);
         Assertions.assertThat(findList).containsExactly(1);
-    }
-
-    private int[] execute(int n, int[] nArray, int m, int[] mArray) {
-        int[] sortedArray = Arrays.stream(nArray).sorted().toArray();
-        int[] findResult = new int[m];
-
-        for (int i = 0; i < m; i++) {
-            findResult[i] = binarySearch(sortedArray, mArray[i], 0, n-1);
-        }
-        return findResult;
-    }
-
-    private int binarySearch(int[] sortedArray, int findNumber, int left, int right) {
-        if(left > right) return 0;
-        int middleIdx = (left + right) / 2;
-        if(findNumber == sortedArray[middleIdx])
-            return 1;
-        else if (findNumber < sortedArray[middleIdx])
-            return binarySearch(sortedArray, findNumber, left, middleIdx - 1);
-        else // (findNumber > sortedArray[middleIdx])
-            return binarySearch(sortedArray, findNumber, middleIdx + 1, right);
     }
 
 }

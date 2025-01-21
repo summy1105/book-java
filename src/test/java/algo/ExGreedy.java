@@ -41,6 +41,17 @@ public class ExGreedy {
         Assertions.assertThat(result).isEqualTo(6);
     }
 
+    private int greedy(int n, int k, int[] coinValues) {
+        int remain = k;
+        int coinCount = 0;
+        for (int i = n-1; i >=0 ; i--) {
+            int coinValue = coinValues[i];
+            coinCount += (remain / coinValue);
+            remain = remain % coinValue;
+        }
+        return coinCount;
+    }
+
 
     @Test
     public void 백준_예제2() {
@@ -106,16 +117,5 @@ public class ExGreedy {
         int result = greedy(n, k, coinValues);
 
         Assertions.assertThat(result).isEqualTo(3);
-    }
-
-    private int greedy(int n, int k, int[] coinValues) {
-        int remain = k;
-        int coinCount = 0;
-        for (int i = n-1; i >=0 ; i--) {
-            int coinValue = coinValues[i];
-            coinCount += (remain / coinValue);
-            remain = remain % coinValue;
-        }
-        return coinCount;
     }
 }

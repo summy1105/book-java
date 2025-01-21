@@ -17,3 +17,7 @@
 - 시험환경 노출
 - 두시간에 4문제
 - 난이도 : 실버1 ~ 골드1(백준), 레벨3(프로그래머스), Leetcode(Medium)
+
+
+#### 까먹지 말것
+- 최대공약수 구하는 알고리즘 : [유클리드 호제법](./programmers/AdditionOfFractions.java) - gcdRecursion()

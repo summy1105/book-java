@@ -36,6 +36,18 @@ public class ExDynamicProgramming {
         Assertions.assertThat(answer).isEqualTo(2);
     }
 
+    private int execute(int n) {
+        if (n <= 2) return n;
+        int memory = 1;
+        int result = 2;
+        for (int i = 3; i <= n ; i++) {
+            int sum = result + memory;
+            memory = result;
+            result = sum;
+        }
+        return result % 10_007;
+    }
+
     @Test
     public void 예제_2() {
         int n = 9;
@@ -55,17 +67,5 @@ public class ExDynamicProgramming {
         int n = 1000;
         int answer = execute(n);
         Assertions.assertThat(answer).isLessThan(10_007);
-    }
-
-    private int execute(int n) {
-        if (n <= 2) return n;
-        int memory = 1;
-        int result = 2;
-        for (int i = 3; i <= n ; i++) {
-            int sum = result + memory;
-            memory = result;
-            result = sum;
-        }
-        return result % 10_007;
     }
 }
