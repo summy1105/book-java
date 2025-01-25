@@ -6,7 +6,8 @@
 6. 코테 알고리즘 & 프로그래머스 문풀 - [Youtube link](https://www.youtube.com/playlist?list=PLi-xJrVzQaxXC2Aausv_6mlOZZ2g2J6YB) : algo
    - 외워야 할 기본 셋 코드 알고리즘
      - Binary Search : [code](src/test/java/algo/ExBinarySearch.java)
-     - QuickSort : [code](src/test/java/algo/ExQuickSort.java)
+     - QuickSort : [code](src/test/java/algo/ExQuickSort.java), [reverse](src/test/java/algo/programmers/PlaceStringInDescendingOrder.java)
      - Minimum Spanning Tree : [code](src/test/java/algo/ExMinimumSpanningTree.java)
      - Dijkstra : [code](src/test/java/algo/ExDijkstra.java)
 7. 자바와 JUnit을 활용한 실용주의 단위 테스트 : junit_test
+   
