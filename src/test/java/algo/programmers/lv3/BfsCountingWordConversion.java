@@ -1,11 +1,11 @@
-package algo.programmers;
+package algo.programmers.lv3;
 
 import org.junit.jupiter.api.Test;
 
 import java.util.LinkedList;
 import java.util.Queue;
 
-// https://school.programmers.co.kr/learn/courses/30/lessons/43163
+// https://school.programmers.co.kr/learn/courses/30/lessons/43163 lv3
 public class BfsCountingWordConversion {
     @Test
     public void test() {

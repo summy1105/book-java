@@ -1,9 +1,9 @@
-package algo.programmers;
+package algo.programmers.lv0;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-//https://school.programmers.co.kr/learn/courses/30/lessons/120876
+//https://school.programmers.co.kr/learn/courses/30/lessons/120876 lv0
 public class LengthOfOverlappingLineSegments {
 
     @Test

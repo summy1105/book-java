@@ -20,12 +20,12 @@
 
 
 #### 까먹지 말것
-- 최대공약수 구하는 알고리즘 : [유클리드 호제법](./programmers/AdditionOfFractions.java) - gcdRecursion()
+- 최대공약수 구하는 알고리즘 : [유클리드 호제법](./programmers/lv0/AdditionOfFractions.java) - gcdRecursion()
 - int max : 약 20억, long max : 약 920경 => 0.92 * 10^19 => 숫자 19자리
 - ```"  asb cdk  ".split(" ", -1)```=> {"" ,"", "asb", "cdk", "", ""} 이렇게 생성됨
 
 
 #### 주운팁
 - ```new char[1] == new char[]{'\0'}``` 과 같다 : ```"A".equals(new String(new char[1]).replaceAll("\0", "A")) == true```
-- 제곱수인 경우 약수의 개수가 홀수 [코드](./programmers/TheNumberAndAdditionOfDivisors.java)
+- 제곱수인 경우 약수의 개수가 홀수 [코드](./programmers/lv1/TheNumberAndAdditionOfDivisors.java)
 - ``` "123456".matches("^[\\d]{4}|[\\d]{6}$") ``` 텍스트 길이가 4 혹은 6이고, 숫자로만 구성되어 있는 지 검사 

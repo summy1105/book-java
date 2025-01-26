@@ -1,11 +1,11 @@
-package algo.programmers;
+package algo.programmers.lv2;
 
 import org.junit.jupiter.api.Test;
 
 import java.util.LinkedList;
 import java.util.Queue;
 
-//https://school.programmers.co.kr/learn/courses/30/lessons/1844
+//https://school.programmers.co.kr/learn/courses/30/lessons/1844 lv2
 public class BfsGameMapShortestDistance {
     @Test
     public void test() {

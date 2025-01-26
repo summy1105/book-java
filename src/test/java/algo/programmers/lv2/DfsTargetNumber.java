@@ -1,8 +1,8 @@
-package algo.programmers;
+package algo.programmers.lv2;
 
 import org.junit.jupiter.api.Test;
 
-// https://school.programmers.co.kr/learn/courses/30/lessons/43165
+// https://school.programmers.co.kr/learn/courses/30/lessons/43165 lv2
 public class DfsTargetNumber {
 
     @Test

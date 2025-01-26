@@ -1,9 +1,9 @@
-package algo.programmers;
+package algo.programmers.lv0;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-// https://school.programmers.co.kr/learn/courses/30/lessons/120808
+// https://school.programmers.co.kr/learn/courses/30/lessons/120808 lv0
 // 10:46 -> 11
 // 분모 곱하고, 분모 분자 나누기 -> 최대공약수
 public class AdditionOfFractions {

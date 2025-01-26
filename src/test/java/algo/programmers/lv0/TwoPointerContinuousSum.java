@@ -1,4 +1,4 @@
-package algo.programmers;
+package algo.programmers.lv0;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
 
-// https://school.programmers.co.kr/learn/courses/30/lessons/120923
+// https://school.programmers.co.kr/learn/courses/30/lessons/120923 lv0
 // 범위가 중요했음.....
 public class TwoPointerContinuousSum {
     class Solution {
