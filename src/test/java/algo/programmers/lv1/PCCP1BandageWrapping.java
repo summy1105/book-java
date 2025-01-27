@@ -1,4 +1,4 @@
-package algo.programmers.lv0;
+package algo.programmers.lv1;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
