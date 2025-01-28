@@ -26,13 +26,27 @@ public class ExQuickSort {
         Assertions.assertThat(list).containsExactly(IntStream.rangeClosed(1, n).toArray());
     }
 
-    private void quickSort(int[] list, int left, int right) {
-        if (left >= right) return;
+    private void quickSort(int[] arr, int left, int right) {
+        if(left >= right) return;
 
-        int partBasicIdx = partition(list, left, right);
+        // partition
+        int pivotNum = arr[right];
+        int curLeft = left;
+        int curRight = right;
+        while (curLeft < curRight) {
+            while (arr[curLeft] < pivotNum) curLeft++;
+            while (arr[curRight] >= pivotNum && curLeft < curRight) curRight--;
+            { // swap
+                int temp = arr[curRight];
+                arr[curRight] = arr[curLeft];
+                arr[curLeft] = temp;
+            }
+        }
+        arr[right] = arr[curRight];
+        arr[curRight] = pivotNum;
 
-        quickSort(list, left, partBasicIdx - 1);
-        quickSort(list, partBasicIdx + 1, right);
+        quickSort(arr, left, curRight-1);
+        quickSort(arr, curRight+1, right);
     }
 
     private int partition(int[] list, int leftCur, int rightCur) {
