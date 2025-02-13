@@ -32,6 +32,21 @@
 - ``` "123456".matches("^[\\d]{4}|[\\d]{6}$") ``` 텍스트 길이가 4 혹은 6이고, 숫자로만 구성되어 있는 지 검사 
 - 문제 https://school.programmers.co.kr/learn/courses/30/lessons/12924
   - 주어진 자연수를 연속된 자연수의 합으로 표현하는 방법의 수는 주어진 수의 홀수 약수의 개수와 같다라는 정수론 정리가 있습니다.
-
+- 자연수의 공약수 갯수를 구하는 로직 : [문제](https://school.programmers.co.kr/learn/courses/30/lessons/136798)
+  - ```java
+        // count 배열의 인덱스가 자연수이고 각의 수를 구함
+        for (int i = 1; i <= number; i++) {
+            for (int j = 1; j <= number / i; j++) {
+                count[i * j]++;
+            }
+        }
+    ```
+  - ```java
+        if(Math.sqrt(n)%1==0)number++;
+        for(int i=1; i<Math.sqrt(n);i++){
+            if(n%i==0) number+=2; // n과 제곱근보다 큰수인 약수를 한번에 계산
+        }
+    ```
+    
 #### 주요 알고리즘
 - 스택, 큐, 백트래킹, bfs, dfs, 이진탐색, 정렬, 그리디, 투포인터, 다이나믹프로그래밍(점화식), 미니멈스패팅트리, 다익스트라, 플로이드 
