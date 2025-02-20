@@ -24,6 +24,16 @@
 - int max : 약 20억, long max : 약 920경 => 0.92 * 10^19 => 숫자 19자리
 - ```"  asb cdk  ".split(" ", -1)```=> {"" ,"", "asb", "cdk", "", ""} 이렇게 생성됨
 - regex - matcher 활용 : [코드](./programmers/lv2/JadenCaseString.java)
+- 소수(prime number) 확인
+    - 제곱근까지 나누어지는지 확인해도 된다. ```Math.sqrt(number)```
+  - ```java
+        boolean[] check = new boolean[n+1];
+        for(int i=2; i<= n ; i++){
+            if(check[i] == false){
+                for(int j=i*2; j<=n ; j+=i) check[j] = true;
+            }
+        }
+    ```
 
 
 #### 주운팁
@@ -49,4 +59,31 @@
     ```
     
 #### 주요 알고리즘
-- 스택, 큐, 백트래킹, bfs, dfs, 이진탐색, 정렬, 그리디, 투포인터, 다이나믹프로그래밍(점화식), 미니멈스패팅트리, 다익스트라, 플로이드 
+- 스택, 큐, 백트래킹, bfs, dfs, 이진탐색, 정렬, 그리디, 투포인터, 다이나믹프로그래밍(점화식), 미니멈스패팅트리, 다익스트라, 플로이드
+
+
+#### 다시볼것
+- [가장큰 돗자리 구하기](./programmers/lv1/PCCE10Park.java)
+- [동영상재생기](./programmers/lv1/PCCP1VideoPlayer.java)
+- [공원산책](./programmers/lv1/WalkInThePark.java)
+- [아날로그 시계](./programmers/lv2/AnalogClock.java)
+- [게임 맵 최단거리](./programmers/lv2/BfsGameMapShortestDistance.java)
+- [카펫](./programmers/lv2/Carpet.java)
+- [의상](./programmers/lv2/Clothes.java)
+- [타겟 넘버](./programmers/lv2/DfsTargetNumber.java)
+- [예상 대진표](./programmers/lv2/EstimatedMatchSheet.java)
+- [피로도](./programmers/lv2/FatigueLevel.java)
+- [H-Index](./programmers/lv2/HIndex.java)
+- [JadenCase 문자열 만들기](./programmers/lv2/JadenCaseString.java)
+- [빛의 경로 사이클](./programmers/lv2/LightPathCycle.java)
+- [멀리 뛰기](./programmers/lv2/LongJump.java)
+- [다음 큰 숫자](./programmers/lv2/NextBigNumber.java)
+- [N개의 최소공배수](./programmers/lv2/NLeastCommonMultiple.java)
+- [연속 부분 수열 합의 개수](./programmers/lv2/NumberOfConsecutivePartialSequenceSums.java)
+- [프로세스](./programmers/lv2/Process.java)
+- [연속된 부분 수열의 합](./programmers/lv2/SumOfConsecutiveSubsequences.java)
+- [단어 변환](./programmers/lv3/BfsCountingWordConversion.java)
+- [네트워크](./programmers/lv3/BfsNetwork.java)
+- [뉴스 클러스터링](./programmers/lv2/KakaoNewsClustering.java)
+- [모음사전](./programmers/lv2/VowelDictionary.java)
+- [야근 지수](./programmers/lv3/IndexOvertimeWork.java)

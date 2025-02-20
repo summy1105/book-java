@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 
 // https://school.programmers.co.kr/learn/courses/30/lessons/12914 lv2
 // 1:17 -> 1:33
-// dynamic
 //
 public class LongJump {
 

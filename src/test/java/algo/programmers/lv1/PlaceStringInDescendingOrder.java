@@ -16,7 +16,7 @@ public class PlaceStringInDescendingOrder {
         if(left >= right) return;
         int partition = partition(arr, left, right);
         quickSort(arr, left, partition-1);
-        quickSort(arr, partition+1, right);
+        quickSort(arr, partition+1, right); 
     }
 
     int partition(char[] arr, int left, int right) {

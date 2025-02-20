@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Stack;
 
-// https://school.programmers.co.kr/learn/courses/30/lessons/12911 lv2
+// https://school.programmers.co.kr/learn/courses/30/lessons/12973 lv2
 
 public class StackRemovingPairings {
     public int solution(String s)
