@@ -87,3 +87,9 @@
 - [뉴스 클러스터링](./programmers/lv2/KakaoNewsClustering.java)
 - [모음사전](./programmers/lv2/VowelDictionary.java)
 - [야근 지수](./programmers/lv3/IndexOvertimeWork.java)
+- [뒤에 있는 큰 수 찾기](./programmers/lv2/FindLargeNumberBehind.java)
+- [땅따먹기](./programmers/lv2/Hopscotch.java)
+- [스킬트리](https://school.programmers.co.kr/learn/courses/30/lessons/49993) : 더 나은 수준으로 다시 풀기
+- [택배상자](https://school.programmers.co.kr/learn/courses/30/lessons/131704)
+- [숫자 변환하기](https://school.programmers.co.kr/learn/courses/30/lessons/154538) : 경우의 수를 줄일수 있는 방법을 생각해 보자
+- [파일명 정렬](./programmers/lv2/KakaoSortFileNames.java) : Arrays 정렬 이용 방법도 잇음
