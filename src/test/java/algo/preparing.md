@@ -60,7 +60,18 @@
     
 #### 주요 알고리즘
 - 스택, 큐, 백트래킹, bfs, dfs, 이진탐색, 정렬, 그리디, 투포인터, 다이나믹프로그래밍(점화식), 미니멈스패팅트리, 다익스트라, 플로이드
-
+- DP 고려 케이스
+  - “최대”, “최소”, “경우의 수” 등을 구할 때
+  - 이전의 결과를 재사용해야 하거나, 결정에 따라 미래의 결과가 영향을 받는 경우
+  - DP는 메모리를 많이 사용할 수 있으므로 메모리 제한이 있는 문제에서는 주의
+- Greedy 고려 케이스
+  - 각 단계에서 최선의 선택이 전체 최적해로 이어질 수 있는 경우
+  - 문제에 “가장 큰 값”, “가장 작은 값” 등을 요구하며, 각 선택이 독립적일 때
+- 스택/큐 고려 케이스
+  - 순차적으로 데이터를 처리해야 하고, 특정 시점에 “최근” 데이터(스택)나 “먼저 들어온” 데이터(큐)가 필요할 때
+- dfs/bfs 선택 기준
+  - 최단 경로나 최소 이동 횟수를 요구한다면 BFS(ex.미로 문제: 시작점에서 목표까지 최단 경로)
+  - 모든 가능한 경로 탐색이나 백트래킹이 필요하면 DFS(ex. 퍼즐 문제: 가능한 모든 이동 경로를 탐색)
 
 #### 다시볼것
 - [가장큰 돗자리 구하기](./programmers/lv1/PCCE10Park.java)
@@ -93,3 +104,11 @@
 - [택배상자](https://school.programmers.co.kr/learn/courses/30/lessons/131704)
 - [숫자 변환하기](https://school.programmers.co.kr/learn/courses/30/lessons/154538) : 경우의 수를 줄일수 있는 방법을 생각해 보자
 - [파일명 정렬](./programmers/lv2/KakaoSortFileNames.java) : Arrays 정렬 이용 방법도 잇음
+- [가장 큰수](./programmers/lv2/LargestNumber.java) : 정렬 기준을 잘 생각해 보자
+- [큰 수 만들기](./programmers/lv2/MakeBigNumber.java) : 알고리즘 분류된것으로 풀면 안됨
+- [스티커모으기](https://school.programmers.co.kr/learn/courses/30/lessons/12971)
+- [불량 사용자](https://school.programmers.co.kr/learn/courses/30/lessons/64064) : regex, boolean 배열대신 bit연산 사용하는 방법으로 다시
+- [미로탈출](https://school.programmers.co.kr/learn/courses/30/lessons/159993) : 더 적절한 방법으로 다시 풀기
+- [메뉴 리뉴얼](./programmers/lv2/KaKaoMenuRenewal.java) : 후보선정을 줄일수 있는 방법 생각하기
+- [보석쇼핑](https://school.programmers.co.kr/learn/courses/30/lessons/67258) : 이중포문X
+- [징검다리 건너기](https://school.programmers.co.kr/learn/courses/30/lessons/64062)
