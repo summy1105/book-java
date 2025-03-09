@@ -21,7 +21,7 @@
 
 #### 까먹지 말것
 - 최대공약수 구하는 알고리즘 : [유클리드 호제법](./programmers/lv0/AdditionOfFractions.java) - gcdRecursion()
-- int max : 약 20억, long max : 약 920경 => 0.92 * 10^19 => 숫자 19자리
+- int max : 약 20억, long max : 약 92경 => 0.92 * 10^19 => 숫자 19자리
 - ```"  asb cdk  ".split(" ", -1)```=> {"" ,"", "asb", "cdk", "", ""} 이렇게 생성됨
 - regex - matcher 활용 : [코드](./programmers/lv2/JadenCaseString.java)
 - 소수(prime number) 확인
@@ -73,6 +73,9 @@
   - 최단 경로나 최소 이동 횟수를 요구한다면 BFS(ex.미로 문제: 시작점에서 목표까지 최단 경로)
   - 모든 가능한 경로 탐색이나 백트래킹이 필요하면 DFS(ex. 퍼즐 문제: 가능한 모든 이동 경로를 탐색)
 
+##### 다른 알고리즘
+- 슬라이딩 윈도우, 카데인알고리즘, Difference Array Technique(차이배열기법)
+
 #### 다시볼것
 - [가장큰 돗자리 구하기](./programmers/lv1/PCCE10Park.java)
 - [동영상재생기](./programmers/lv1/PCCP1VideoPlayer.java)
@@ -112,3 +115,13 @@
 - [메뉴 리뉴얼](./programmers/lv2/KaKaoMenuRenewal.java) : 후보선정을 줄일수 있는 방법 생각하기
 - [보석쇼핑](https://school.programmers.co.kr/learn/courses/30/lessons/67258) : 이중포문X
 - [징검다리 건너기](https://school.programmers.co.kr/learn/courses/30/lessons/64062)
+- [리코쳇 로봇](https://school.programmers.co.kr/learn/courses/30/lessons/169199) : dfsX
+- [여행경로](./programmers/lv3/TravelRoute.java) : TreeSet 유념하기
+- [연속 펄스 부분 수열의 합](https://school.programmers.co.kr/learn/courses/30/lessons/161988) : 부분 수열의 합은 카데인 알고리즘으로 풀수있다.
+- [가장 큰 정사각형 찾기](https://school.programmers.co.kr/learn/courses/30/lessons/12905)
+- [경주로 건설](https://school.programmers.co.kr/learn/courses/30/lessons/67259)
+- [디스크 컨트롤러](https://school.programmers.co.kr/learn/courses/30/lessons/42627) : 예외케이스 생각하기
+- [가장 긴 팰린드롬](https://school.programmers.co.kr/learn/courses/30/lessons/12904) : Manacher’s Algorithm 학습하기[코드](./programmers/lv3/LongestPalindrome.java)
+- [거스름돈](https://school.programmers.co.kr/learn/courses/30/lessons/12907)
+- [순위](https://school.programmers.co.kr/learn/courses/30/lessons/49191) : 플로이드로 다시 풀어보기
+- [파괴되지 않은 건물](https://school.programmers.co.kr/learn/courses/30/lessons/92344)
