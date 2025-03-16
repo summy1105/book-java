@@ -74,7 +74,7 @@
   - 모든 가능한 경로 탐색이나 백트래킹이 필요하면 DFS(ex. 퍼즐 문제: 가능한 모든 이동 경로를 탐색)
 
 ##### 다른 알고리즘
-- 슬라이딩 윈도우, 카데인알고리즘, Difference Array Technique(차이배열기법)
+- 슬라이딩 윈도우, 카데인알고리즘, Difference Array Technique(차이배열기법), Manacher’s Algorithm, Tree DP(leaf부터 계산함)
 
 #### 다시볼것
 - [가장큰 돗자리 구하기](./programmers/lv1/PCCE10Park.java)
@@ -125,3 +125,9 @@
 - [거스름돈](https://school.programmers.co.kr/learn/courses/30/lessons/12907)
 - [순위](https://school.programmers.co.kr/learn/courses/30/lessons/49191) : 플로이드로 다시 풀어보기
 - [파괴되지 않은 건물](https://school.programmers.co.kr/learn/courses/30/lessons/92344)
+- [매출 하락 최소화](https://school.programmers.co.kr/learn/courses/30/lessons/72416) : 트리dp
+- [후보키](./programmers/lv2/KaKaoCandidateKey.java) : 비트 연산
+- [두 원 사이의 정수 쌍](https://school.programmers.co.kr/learn/courses/30/lessons/181187)
+- [표 편집](./programmers/lv3/KaKaoEditTable.java)
+- [숫자 블록](https://school.programmers.co.kr/learn/courses/30/lessons/12923) : 문제 잘 읽기
+- [조이스틱](https://school.programmers.co.kr/learn/courses/30/lessons/42860)
