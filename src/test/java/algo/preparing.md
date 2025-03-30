@@ -34,6 +34,25 @@
             }
         }
     ```
+- 배열에서 모든 경우의 수(순열 : permute)를 구하는 재귀함수
+  - ```java
+    // dist 배열의 순열을 생성하는 재귀 함수 (깊이 idx부터)
+    private void permute(int[] arr, int idx, ArrayList<int[]> perms) {
+        if (idx == arr.length) {
+            perms.add(arr.clone());
+            return;
+        }
+        for (int i = idx; i < arr.length; i++) {
+            swap(arr, idx, i);
+            permute(arr, idx + 1, perms);
+            swap(arr, idx, i);
+        }
+    }
+
+    private void swap(int[] arr, int i, int j) {
+        int temp = arr[i]; arr[i] = arr[j]; arr[j] = temp;
+    }
+    ```
 
 
 #### 주운팁
@@ -74,7 +93,9 @@
   - 모든 가능한 경로 탐색이나 백트래킹이 필요하면 DFS(ex. 퍼즐 문제: 가능한 모든 이동 경로를 탐색)
 
 ##### 다른 알고리즘
-- 슬라이딩 윈도우, 카데인알고리즘, Difference Array Technique(차이배열기법), Manacher’s Algorithm, Tree DP(leaf부터 계산함)
+- 슬라이딩 윈도우, 카데인알고리즘, Difference Array Technique(차이배열기법), Manacher’s Algorithm, Tree DP(leaf부터 계산함), 
+- 다중점 다익스트라(시작점이 여러개인 경우), 세그먼트 트리, 펜윅트리, 라인스위핑, 위상정렬, 최소공통조상, 네트워크플로우, 이분매칭, 최대플로우, 최소컷, 트라이, 비트마스크, 레드블랙트리, AVL트리, 스플레
+- [알고리즘 분류](https://www.acmicpc.net/problem/tags)
 
 #### 다시볼것
 - [가장큰 돗자리 구하기](./programmers/lv1/PCCE10Park.java)
@@ -131,3 +152,19 @@
 - [표 편집](./programmers/lv3/KaKaoEditTable.java)
 - [숫자 블록](https://school.programmers.co.kr/learn/courses/30/lessons/12923) : 문제 잘 읽기
 - [조이스틱](https://school.programmers.co.kr/learn/courses/30/lessons/42860)
+- [기둥과 보 설치](./programmers/lv3/KaKaoInstallationPillarBeam.java)
+- [광고 삽입](https://school.programmers.co.kr/learn/courses/30/lessons/72414): 문제별로 메모리 제한이 다름
+- [무지의 먹방 라이브](https://school.programmers.co.kr/learn/courses/30/lessons/42891)
+- [올바른 괄호 갯수](https://school.programmers.co.kr/learn/courses/30/lessons/12929)
+- [110 옮기기](./programmers/lv3/Move110.java) : 순회와 아닌거, 메소드 잘 파악하기
+- [쿠키구입](https://school.programmers.co.kr/learn/courses/30/lessons/49995)
+- [외벽점검](./programmers/lv3/KakaoCheckExteriorWall.java)
+- [표현 가능한 이진트리](./programmers/lv3/KakaoExpressableBinaryTree.java)
+- [충돌위험 찾기](https://school.programmers.co.kr/learn/courses/30/lessons/340211) : 문제 좀 잘읽자
+- [자동완성](./programmers/lv4/KaKaoAutocomplete.java)
+- [스타수열](https://school.programmers.co.kr/learn/courses/30/lessons/70130) : 쉽게 생각하자
+- [3*n 타일링](https://school.programmers.co.kr/learn/courses/30/lessons/12902)
+- [자동완성](./programmers/lv4/KaKaoAutocomplete.java)
+- [N으로 표현](./programmers/lv4/ExpressedN.java)
+- [등산코스 정하기](https://school.programmers.co.kr/learn/courses/30/lessons/118669)
+- [아이템 줍기](./programmers/lv3/PickingUpItems.java)
