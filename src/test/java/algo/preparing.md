@@ -53,6 +53,7 @@
         int temp = arr[i]; arr[i] = arr[j]; arr[j] = temp;
     }
     ```
+- Arrays.hashcode()를 쓰지 말자
 
 
 #### 주운팁
@@ -61,8 +62,9 @@
 - ``` "123456".matches("^[\\d]{4}|[\\d]{6}$") ``` 텍스트 길이가 4 혹은 6이고, 숫자로만 구성되어 있는 지 검사 
 - 문제 https://school.programmers.co.kr/learn/courses/30/lessons/12924
   - 주어진 자연수를 연속된 자연수의 합으로 표현하는 방법의 수는 주어진 수의 홀수 약수의 개수와 같다라는 정수론 정리가 있습니다.
-- 자연수의 공약수 갯수를 구하는 로직 : [문제](https://school.programmers.co.kr/learn/courses/30/lessons/136798)
+- 자연수의 공약수 갯수를 구하는 로직 : [문제](https://school.programmers.co.kr/learn/courses/30/lessons/136798), [문제2](./programmers/lv3/MemorizingBigMultiplicationTable.java)
   - ```java
+        // 여러개의 숫자의 공약수 갯수를 구할때는 아래보다 이 로직이 빠름
         // count 배열의 인덱스가 자연수이고 각의 수를 구함
         for (int i = 1; i <= number; i++) {
             for (int j = 1; j <= number / i; j++) {
@@ -168,3 +170,13 @@
 - [N으로 표현](./programmers/lv4/ExpressedN.java)
 - [등산코스 정하기](https://school.programmers.co.kr/learn/courses/30/lessons/118669)
 - [아이템 줍기](./programmers/lv3/PickingUpItems.java)
+- [카운트다운](https://school.programmers.co.kr/learn/courses/30/lessons/131129)
+- [블록 이동하기](./programmers/lv3/KaKaoMovingBlock.java)
+- [표병합](./programmers/lv3/KaKaoMergeTable.java)
+- [최적의 행렬곱셈](./programmers/lv3/OptimalMatrixMultiplication.java)
+- [모두 0으로 만들기](./programmers/lv3/MakingAllZero.java)
+- [봉인된 주문](./programmers/lv3/SealedSpell.java)
+- [산모양 타일링](./programmers/lv3/MountainShapeTiling.java)
+- [단어퍼즐](./programmers/lv4/WordPuzzle.java)
+- [유사 칸토어 비트열](./programmers/lv2/AnalogousCantorSet.java) : 정석방법, 변칙방법 2가지
+- [공 이동 시뮬레이션](./programmers/lv3/BallMovementSimulation.java) : 구현 예외 케이스 생각하기
